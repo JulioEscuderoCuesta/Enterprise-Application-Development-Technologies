@@ -18,7 +18,7 @@ public class Season {
     
     //Getters & Setters
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -30,7 +30,7 @@ public class Season {
     }
 
     public Date getReleaseDate() {
-        return this.releaseDate;
+        return releaseDate;
     }
 
     public void setReleaseDate(Date releaseDate) {
@@ -38,7 +38,7 @@ public class Season {
     }
 
     public Series getSeries() {
-        return this.series;
+        return series;
     }
 
     public ArrayList<Chapter> getChapters() {

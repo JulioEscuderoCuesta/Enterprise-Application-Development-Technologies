@@ -77,7 +77,7 @@ public class User {
 
     private Set<Bill> getBillPerMonth(String month) {
         Bill billOfThatMonth;
-        ArrayList<Bill> auxList = new ArrayList<Bill>();
+        Set<Bill> auxList = new ArrayList<Bill>();
         auxList.addAll(pendingBills);
         auxList.addAll(billsPaid);
 

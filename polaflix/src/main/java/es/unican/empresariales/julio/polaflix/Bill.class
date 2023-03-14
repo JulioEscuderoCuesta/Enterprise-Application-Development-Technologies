@@ -1,10 +1,11 @@
 import java.util.ArrayList;
 
 public class Bill {
+
+    private static final double MONTHLYFEE = 20;
     
     private double totalCost;
     private Date releaseDate;
-    private Date dueDate;
     private Date paymentDay;
     private User user;
     private Set<BillLine> lines;
@@ -12,9 +13,8 @@ public class Bill {
     public Bill(Date releaseDate,  User user) {
         this.releaseDate = releaseDate;
         this.user = user;
-        dueDate = null;
-        calculatePaymentDay();
         lines = new ArrayList<BillLine>();
+        totalcost = 0;
     }
 
     //Getters & Setters
@@ -24,10 +24,6 @@ public class Bill {
 
     public Date getReleaseDate() {
         return releaseDate;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
     }
 
     public Date getPaymentDay() {
@@ -44,20 +40,22 @@ public class Bill {
 
     /**************************************************************** */
 
-    private void calculateBill() {
-        // TODO: 
-    }
-
-    private void calculateDueDate() {
-        // TODO: 
+    public void calculateBill() {
+        if(user.getUserType.equals(UserType.MONTHLYUSER))
+            totalCost = MONTHLYFEE;
+        else {
+            foreach(Billline line in lines) {
+                totalCost += line.getCost();
+            }
+        }
     }
 
     public void addBillLine(BillLine line) {
-        // TODO:
+        lines.add(line);
     }
 
     private void removeBillLine(BillLine line) {
-        // TODO:
+        lines.add(line);
     }
 
     
