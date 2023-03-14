@@ -1,0 +1,64 @@
+import java.util.ArrayList;
+
+public class Bill {
+    
+    private double totalCost;
+    private Date releaseDate;
+    private Date dueDate;
+    private Date paymentDay;
+    private User user;
+    private Set<BillLine> lines;
+
+    public Bill(Date releaseDate,  User user) {
+        this.releaseDate = releaseDate;
+        this.user = user;
+        dueDate = null;
+        calculatePaymentDay();
+        lines = new ArrayList<BillLine>();
+    }
+
+    //Getters & Setters
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public Date getPaymentDay() {
+        return paymentDay;
+    }
+
+    private void setPaymentDay(Date paymentDay) {
+        this.paymentDay = date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    /**************************************************************** */
+
+    private void calculateBill() {
+        // TODO: 
+    }
+
+    private void calculateDueDate() {
+        // TODO: 
+    }
+
+    public void addBillLine(BillLine line) {
+        // TODO:
+    }
+
+    private void removeBillLine(BillLine line) {
+        // TODO:
+    }
+
+    
+}

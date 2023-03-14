@@ -1,0 +1,69 @@
+
+
+public abstract class Series {
+
+    private String name;
+    private LocalDate releaseDate;
+    private String synopsis;
+    private Set<String> creators;
+    private Set<String> actors;
+    private pricePerChapter double;
+    private Set<Season> seasons;
+
+    public Series(String name, LocalDate releaseLocalDate, String synopsis, ArrayList<String> creators, ArrayList<String> actors, double pricePerChapter, ArrayList<Season> seasons) {
+        this.name = name;
+        this.releaseLocalDate = releaseLocalDate;
+        this.synopsis = synopsis;
+        this.creators = creators;
+        this.actors = actors;
+        this.pricePerChapter = pricePerChapter;
+        this.seasons = seasons;
+    }
+
+    //Getters & Setters
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getReleaseLocalDate() {
+        return this.releaseLocalDate;
+    }
+
+    public void setReleaseLocalDate(String releaseLocalDate) {
+        return this.releaseLocalDate = releaseLocalDate;
+    }
+
+    public String getSynopsis() {
+        return this.synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public Set<String> getCreator() {
+        return this.creators;
+    }
+
+    public Set<String> getActors() {
+        return this.actors;
+    }
+
+    public double getPricePerChapter() {
+        return this.pricePerChapter;
+    }
+
+    public void setPricePerChapter(double pricePerChapter) {
+        this.pricePerChapter = pricePer
+    }
+
+    /**************************************************************** */
+
+    public void watch() {
+        // TODO:
+    }
+}
