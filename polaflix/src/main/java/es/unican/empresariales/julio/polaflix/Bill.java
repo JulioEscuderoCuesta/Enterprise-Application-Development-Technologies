@@ -1,3 +1,6 @@
+package es.unican.empresariales.julio.polaflix;
+import java.util.Date;
+import java.util.Set;
 import java.util.ArrayList;
 
 public class Bill {
@@ -8,13 +11,13 @@ public class Bill {
     private Date releaseDate;
     private Date paymentDay;
     private User user;
-    private Set<BillLine> lines;
+    private ArrayList<BillLine> lines;
 
     public Bill(Date releaseDate,  User user) {
         this.releaseDate = releaseDate;
         this.user = user;
         lines = new ArrayList<BillLine>();
-        totalcost = 0;
+        totalCost = 0.0;
     }
 
     //Getters & Setters
@@ -30,8 +33,8 @@ public class Bill {
         return paymentDay;
     }
 
-    private void setPaymentDay(Date paymentDay) {
-        this.paymentDay = date;
+    public void setPaymentDay(Date paymentDay) {
+        this.paymentDay = paymentDay;
     }
 
     public User getUser() {
@@ -41,10 +44,10 @@ public class Bill {
     /**************************************************************** */
 
     public void calculateBill() {
-        if(user.getUserType.equals(UserType.MONTHLYUSER))
+        if(user.getUserType().equals(UserType.MONTHLYUSER))
             totalCost = MONTHLYFEE;
         else {
-            foreach(Billline line in lines) {
+            for(BillLine line: lines) {
                 totalCost += line.getCost();
             }
         }
@@ -54,7 +57,7 @@ public class Bill {
         lines.add(line);
     }
 
-    private void removeBillLine(BillLine line) {
+    public void removeBillLine(BillLine line) {
         lines.add(line);
     }
 

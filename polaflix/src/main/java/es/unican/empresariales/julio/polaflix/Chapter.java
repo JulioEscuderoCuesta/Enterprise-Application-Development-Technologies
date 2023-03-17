@@ -1,4 +1,4 @@
-
+package es.unican.empresariales.julio.polaflix;
 
 public class Chapter {
 
@@ -7,18 +7,16 @@ public class Chapter {
     private int number;
     private double duration;
     private String link;
-    private boolean alreadyWatched;
-    private double cost;
+    //private boolean alreadyWatched;
     private Season season;
 
-    public Chapter(String title, String description, int number, double duration, String link, double cost, Season season) {
+    public Chapter(String title, String description, int number, double duration, String link, Season season) {
         this.title = title;
         this.description = description;
         this.number = number;
         this.duration = duration;
         this.link = link;
         //alreadyWatched = false;
-        this.cost = cost;
         this.season = season;
     }
 

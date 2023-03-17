@@ -1,4 +1,4 @@
-
+package es.unican.empresariales.julio.polaflix;
 
 public abstract class Categorie {
 

@@ -1,4 +1,4 @@
-
+package es.unican.empresariales.julio.polaflix;
 
 public class StandarCategorie extends Categorie {
 

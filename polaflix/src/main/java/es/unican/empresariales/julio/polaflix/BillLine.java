@@ -1,4 +1,6 @@
+package es.unican.empresariales.julio.polaflix;
 
+import java.util.Date;
 
 public class BillLine {
 
