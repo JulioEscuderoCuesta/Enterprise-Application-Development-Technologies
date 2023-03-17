@@ -2,7 +2,9 @@ package es.unican.empresariales.julio.polaflix;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class User {
 
@@ -10,11 +12,11 @@ public class User {
     private String password;
     private String iban;
     private UserType type;
-    private ArrayList<Series> startedSeries;
-    private ArrayList<Series> pendingSeries;
-    private ArrayList<Series> finishedSeries;
-    private ArrayList<Bill> billsPaid;
-    private ArrayList<Bill> pendingBills;
+    private List<Series> startedSeries;
+    private List<Series> pendingSeries;
+    private List<Series> finishedSeries;
+    private List<Bill> billsPaid;
+    private List<Bill> pendingBills;
 
     /**
      * 
@@ -64,15 +66,30 @@ public class User {
         this.type = type;
     }
 
-    public ArrayList<Bill> getBillsPaid() {
+    public List<Bill> getBillsPaid() {
         return billsPaid;
     }
 
-    public ArrayList<Bill> getPendingBills() {
+    public List<Bill> getPendingBills() {
         return pendingBills;
     }
     
     /**************************************************************** */
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        User that = (User) o;
+        return super.equals(that)
+            && Objects.equals(this.name, that.name)
+            && Objects.equals(this.password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, password);
+    }
 
     public Bill getBillCurrentMonth() {
         return pendingBills.get(pendingBills.size() - 1);

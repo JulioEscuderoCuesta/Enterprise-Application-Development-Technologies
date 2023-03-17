@@ -1,6 +1,6 @@
 package es.unican.empresariales.julio.polaflix;
 import java.util.Date;
-import java.util.Set;
+import java.util.Objects;
 import java.util.ArrayList;
 
 public class Bill {
@@ -59,6 +59,24 @@ public class Bill {
 
     public void removeBillLine(BillLine line) {
         lines.add(line);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        Bill that = (Bill) o;
+        return super.equals(that)
+            && Objects.equals(this.totalCost, that.totalCost)
+            && Objects.equals(this.releaseDate, that.releaseDate)
+            && Objects.equals(this.paymentDay, that.paymentDay)
+            && Objects.equals(this.user, that.user)
+            && Objects.equals(this.lines, that.lines);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(totalCost, releaseDate, paymentDay, user, lines);
     }
 
     

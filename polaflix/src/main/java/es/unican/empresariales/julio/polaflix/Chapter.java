@@ -1,5 +1,7 @@
 package es.unican.empresariales.julio.polaflix;
 
+import java.util.Objects;
+
 public class Chapter {
 
     private String title;
@@ -65,6 +67,24 @@ public class Chapter {
 
     public void watch() {
         // TODO:
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        Chapter that = (Chapter) o;
+        return super.equals(that)
+            && Objects.equals(this.title, that.title)
+            && Objects.equals(this.description, that.description)
+            && Objects.equals(this.number, that.number)
+            && Objects.equals(this.duration, that.duration)
+            && Objects.equals(this.season, that.season);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, number, number, duration, season);
     }
 
 }
