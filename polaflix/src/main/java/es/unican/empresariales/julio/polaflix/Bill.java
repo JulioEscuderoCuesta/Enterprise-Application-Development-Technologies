@@ -3,13 +3,24 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.ArrayList;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+
+@Entity
+@Table(name = "bill")
+@IdClass(CompoundIdBill.class)
 public class Bill {
 
     private static final double MONTHLYFEE = 20;
-    
+
     private double totalCost;
+    @Id
     private Date releaseDate;
     private Date paymentDay;
+    @Id
     private User user;
     private ArrayList<BillLine> lines;
 

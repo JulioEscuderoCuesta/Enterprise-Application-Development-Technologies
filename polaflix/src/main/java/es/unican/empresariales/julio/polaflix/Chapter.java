@@ -2,14 +2,25 @@ package es.unican.empresariales.julio.polaflix;
 
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+
+@Entity
+@Table(name = "chapter")
+@IdClass(CompoundIdChapter.class)
 public class Chapter {
 
+    @Id
     private String title;
     private String description;
     private int number;
     private double duration;
     private String link;
     //private boolean alreadyWatched;
+    @Id
     private Season season;
 
     public Chapter(String title, String description, int number, double duration, String link, Season season) {

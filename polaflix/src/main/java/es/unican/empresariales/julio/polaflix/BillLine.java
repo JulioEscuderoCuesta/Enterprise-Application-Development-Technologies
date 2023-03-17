@@ -1,9 +1,20 @@
 package es.unican.empresariales.julio.polaflix;
 
 import java.util.Date;
+import javax.persistence.Table;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+@Entity
+@Table(name = "bill")
 public class BillLine {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id; 
+    
     private Date visualizationDate;
     private String seriesName;
     private String seasonName;

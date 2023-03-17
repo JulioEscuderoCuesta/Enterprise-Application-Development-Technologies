@@ -5,10 +5,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+import jakarta.persistence.Id;
+@Entity
+@Table(name = "user")
 public class User {
 
+    @Id
     private String name;
+    @Id
     private String password;
     private String iban;
     private UserType type;

@@ -4,13 +4,20 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+import jakarta.persistence.Id;
+@Entity
+@Table(name = "season")
 public class Season {
 
+    @Id
     private String name;
     private int number;
     private Date releaseDate;
     private Series series;
+    @Id
     private List<Chapter> chapters;
 
     public Season(String name, int number, Date releaseDate, Series series, ArrayList<Chapter> chapters) {

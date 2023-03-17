@@ -4,15 +4,24 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+@Entity
+@Table(name = "series")
+@IdClass(CompoundIdSeries.class)
 public abstract class Series {
 
+    @Id
     private String name;
     private Date releaseDate;
     private String synopsis;
     private List<String> creators;
     private List<String> actors;
     private Categorie categorie;
+    @Id
     private List<Season> seasons;
 
     public Series(String name, Date releaseDate, String synopsis, ArrayList<String> creators, ArrayList<String> actors, Categorie categorie, ArrayList<Season> seasons) {
@@ -31,7 +40,7 @@ public abstract class Series {
         return name;
     }
 
-    public void ArrayListName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
