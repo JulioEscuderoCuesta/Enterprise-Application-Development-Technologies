@@ -7,8 +7,12 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+import javax.persistence.CascadeType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 @Entity
 @Table(name = "series")
 @IdClass(CompoundIdSeries.class)
@@ -20,8 +24,11 @@ public abstract class Series {
     private String synopsis;
     private List<String> creators;
     private List<String> actors;
+    @OneToOne
+    @JoinColumn(name = "categorie")
     private Categorie categorie;
     @Id
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Season> seasons;
 
     public Series(String name, Date releaseDate, String synopsis, ArrayList<String> creators, ArrayList<String> actors, Categorie categorie, ArrayList<Season> seasons) {

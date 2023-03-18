@@ -2,10 +2,13 @@ package es.unican.empresariales.julio.polaflix;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import jakarta.persistence.Id;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 @Entity
 @Table(name = "categorie")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Categorie {
 
     @Id

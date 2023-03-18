@@ -6,9 +6,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Table;
 
-import jakarta.persistence.Id;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 @Entity
 @Table(name = "user")
 public class User {
@@ -18,11 +23,17 @@ public class User {
     @Id
     private String password;
     private String iban;
+    @Enumerated(EnumType.STRING)
     private UserType type;
+    @OneToMany
     private List<Series> startedSeries;
+    @OneToMany
     private List<Series> pendingSeries;
+    @OneToMany
     private List<Series> finishedSeries;
+    @OneToMany(mappedBy = "user")
     private List<Bill> billsPaid;
+    @OneToMany(mappedBy = "user")
     private List<Bill> pendingBills;
 
     /**
@@ -45,7 +56,7 @@ public class User {
         return name;
     } 
     
-    public void ArrayListName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -53,7 +64,7 @@ public class User {
         return password;
     }
 
-    public void ArrayListPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -61,7 +72,7 @@ public class User {
         return iban;
     }
 
-    public void ArrayListIban(String iban) {
+    public void setIban(String iban) {
         this.iban = iban;
     }
 
@@ -69,7 +80,7 @@ public class User {
         return type;
     }
 
-    public void ArrayListUserType(UserType type) {
+    public void setUserType(UserType type) {
         this.type = type;
     }
 

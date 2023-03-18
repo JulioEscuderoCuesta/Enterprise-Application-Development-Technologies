@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 @Entity
 @Table(name = "bill")
 public class BillLine {
@@ -21,12 +22,16 @@ public class BillLine {
     private int chapterNumber;
     private double cost;
 
+    @ManyToOne
+    private Bill bill;
+
     public BillLine(Date visualizationDate, String seriesName, String seasonName, int chapterNumber, double cost, Bill bill) {
         this.visualizationDate = visualizationDate;
         this.seriesName = seriesName;
         this.seasonName = seasonName;
         this.chapterNumber = chapterNumber;
         this.cost = cost;
+        this.bill = bill;
         bill.addBillLine(this);
     }
 
@@ -49,6 +54,10 @@ public class BillLine {
 
     public double getCost() {
         return cost;
+    }
+
+    public Bill getBill() {
+        return bill;
     }
 
     /**************************************************************** */

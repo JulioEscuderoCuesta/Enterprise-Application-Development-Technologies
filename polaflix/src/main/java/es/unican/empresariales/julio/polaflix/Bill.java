@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+import javax.persistence.CascadeType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "bill")
@@ -21,7 +24,9 @@ public class Bill {
     private Date releaseDate;
     private Date paymentDay;
     @Id
+    @ManyToOne
     private User user;
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<BillLine> lines;
 
     public Bill(Date releaseDate,  User user) {
@@ -80,14 +85,13 @@ public class Bill {
         return super.equals(that)
             && Objects.equals(this.totalCost, that.totalCost)
             && Objects.equals(this.releaseDate, that.releaseDate)
-            && Objects.equals(this.paymentDay, that.paymentDay)
             && Objects.equals(this.user, that.user)
             && Objects.equals(this.lines, that.lines);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(totalCost, releaseDate, paymentDay, user, lines);
+        return Objects.hash(totalCost, releaseDate, user, lines);
     }
 
     

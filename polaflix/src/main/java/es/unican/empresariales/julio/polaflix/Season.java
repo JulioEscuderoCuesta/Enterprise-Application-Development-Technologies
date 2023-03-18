@@ -7,7 +7,10 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import jakarta.persistence.Id;
+import javax.persistence.CascadeType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 @Entity
 @Table(name = "season")
 public class Season {
@@ -16,8 +19,10 @@ public class Season {
     private String name;
     private int number;
     private Date releaseDate;
+    @ManyToOne
     private Series series;
     @Id
+    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters;
 
     public Season(String name, int number, Date releaseDate, Series series, ArrayList<Chapter> chapters) {

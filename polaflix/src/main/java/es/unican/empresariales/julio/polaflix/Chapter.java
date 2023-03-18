@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 @Table(name = "chapter")
@@ -21,6 +22,7 @@ public class Chapter {
     private String link;
     //private boolean alreadyWatched;
     @Id
+    @ManyToOne
     private Season season;
 
     public Chapter(String title, String description, int number, double duration, String link, Season season) {
@@ -87,15 +89,12 @@ public class Chapter {
         Chapter that = (Chapter) o;
         return super.equals(that)
             && Objects.equals(this.title, that.title)
-            && Objects.equals(this.description, that.description)
-            && Objects.equals(this.number, that.number)
-            && Objects.equals(this.duration, that.duration)
             && Objects.equals(this.season, that.season);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, number, number, duration, season);
+        return Objects.hash(title, season);
     }
 
 }
