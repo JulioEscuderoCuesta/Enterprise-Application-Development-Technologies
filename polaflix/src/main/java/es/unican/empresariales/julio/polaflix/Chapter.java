@@ -5,9 +5,9 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.ManyToOne;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "chapter")

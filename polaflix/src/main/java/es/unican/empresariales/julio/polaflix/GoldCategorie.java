@@ -1,6 +1,6 @@
 package es.unican.empresariales.julio.polaflix;
 
-import jakarta.persistence.Entity;
+import javax.persistence.Entity;
 
 @Entity(name = "GoldCategorie")
 public class GoldCategorie extends Categorie {

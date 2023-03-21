@@ -1,10 +1,15 @@
 package es.unican.empresariales.julio.polaflix;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import es.unican.empresariales.julio.polaflix.repositories.BillRepository;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Id;
@@ -28,6 +33,9 @@ public class Bill {
     private User user;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<BillLine> lines;
+
+    @Autowired
+    private BillRepository billRepository;
 
     public Bill(Date releaseDate,  User user) {
         this.releaseDate = releaseDate;
@@ -92,6 +100,10 @@ public class Bill {
     @Override
     public int hashCode() {
         return Objects.hash(totalCost, releaseDate, user, lines);
+    }
+
+    public void findByUserId(CompoundIdUser userId) throws IllegalArgumentException {
+        List<Bill> bills = billRepository.findByUserId(userId);
     }
 
     
