@@ -22,12 +22,8 @@ import javax.persistence.ManyToOne;
 @IdClass(CompoundIdBill.class)
 public class Bill {
 
-    private static final double MONTHLYFEE = 20;
 
     private double totalCost;
-    @Id
-    private Date releaseDate;
-    private Date paymentDay;
     @Id
     @ManyToOne
     private User user;
