@@ -12,10 +12,10 @@ import javax.persistence.InheritanceType;
 public abstract class Categorie {
 
     @Id
-    private double pricePerChapter;
+    private static double pricePerChapter;
 
     public Categorie(double pricePerChapter) {
-        this.pricePerChapter = pricePerChapter;
+        Categorie.pricePerChapter = pricePerChapter;
     }
 
     public double getPricePerChapter() {

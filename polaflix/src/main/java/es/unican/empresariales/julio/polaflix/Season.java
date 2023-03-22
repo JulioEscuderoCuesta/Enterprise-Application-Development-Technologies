@@ -18,17 +18,15 @@ public class Season {
     @Id
     private String name;
     private int number;
-    private Date releaseDate;
+    @Id
     @ManyToOne
     private Series series;
-    @Id
     @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters;
 
-    public Season(String name, int number, Date releaseDate, Series series, ArrayList<Chapter> chapters) {
+    public Season(String name, int number, Series series, ArrayList<Chapter> chapters) {
         this.name = name;
         this.number = number;
-        this.releaseDate = releaseDate;
         this.series = series;
         this.chapters = chapters;
     }
@@ -44,14 +42,6 @@ public class Season {
 
     public int getNumber() {
         return this.number;
-    }
-
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
     }
 
     public Series getSeries() {
@@ -71,14 +61,12 @@ public class Season {
         Season that = (Season) o;
         return super.equals(that)
             && Objects.equals(this.name, that.name)
-            && Objects.equals(this.number, that.number)
-            && Objects.equals(this.series, that.series)
-            && Objects.equals(this.chapters, that.chapters);
+            && Objects.equals(this.series, that.series);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, number, series, chapters);
+        return Objects.hash(name, series);
     }
 
 }

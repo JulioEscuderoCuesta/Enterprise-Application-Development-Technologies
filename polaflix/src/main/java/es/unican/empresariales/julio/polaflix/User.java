@@ -1,52 +1,44 @@
 package es.unican.empresariales.julio.polaflix;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Table;
 
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 @Entity
 @Table(name = "user")
-public class User {
+public abstract class User {
 
     @Id
     private String name;
     @Id
     private String password;
     private String iban;
-    @Enumerated(EnumType.STRING)
-    private UserType type;
     @OneToMany
     private List<Series> startedSeries;
     @OneToMany
     private List<Series> pendingSeries;
     @OneToMany
     private List<Series> finishedSeries;
+    private ArrayList<Chapter> chaptersWatched;
     @OneToMany(mappedBy = "user")
-    private List<Bill> billsPaid;
-    @OneToMany(mappedBy = "user")
-    private List<Bill> pendingBills;
+    private List<Bill> bills;
 
     /**
      * 
      */
-    public User(String name, String password, String iban, UserType type) {
+    public User(String name, String password, String iban) {
         this.name = name;
         this.password = password;
-        this.iban =iban;
-        this.type = type;
+        this.iban = iban;
         startedSeries = new ArrayList<Series>();
         pendingSeries = new ArrayList<Series>();
         finishedSeries = new ArrayList<Series>();
-        billsPaid = new ArrayList<Bill>();
-        pendingBills = new ArrayList<Bill>();
+        chaptersWatched = new ArrayList<>();
+        bills = new ArrayList<Bill>();
     }
 
     //Getters & ArrayListters
@@ -74,20 +66,12 @@ public class User {
         this.iban = iban;
     }
 
-    public UserType getUserType() {
-        return type;
+    public List<Bill> getBills() {
+        return bills;
     }
 
-    public void setUserType(UserType type) {
-        this.type = type;
-    }
-
-    public List<Bill> getBillsPaid() {
-        return billsPaid;
-    }
-
-    public List<Bill> getPendingBills() {
-        return pendingBills;
+    public List<Chapter> getChaptersWatched() {
+        return chaptersWatched;
     }
     
     /**************************************************************** */
@@ -102,41 +86,48 @@ public class User {
             && Objects.equals(this.password, that.password);
     }
 
+    public void addBill(Bill bill) {
+        bills.add(bill);
+        bill.setUser(this);
+    }
+
+    public void addChapterWatched(Chapter chapter) {
+        chaptersWatched.add(chapter);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name, password);
     }
 
     public Bill getBillCurrentMonth() {
-        return pendingBills.get(pendingBills.size() - 1);
-
-    }
-
-    public Bill getBillPerMonth(String month) {
-        Bill billOfThatMonth = null;
-        ArrayList<Bill> auxList = new ArrayList<Bill>();
-        auxList.addAll(pendingBills);
-        auxList.addAll(billsPaid);
-
-        Calendar cal = Calendar.getInstance();
-        String monthInString;
-
-        for(Bill bill: auxList) {
-            cal.setTime(bill.getReleaseDate());
-            monthInString = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
-            if(monthInString == month)
-                billOfThatMonth = bill;
+        List<Bill> pendingBills = new ArrayList<Bill>();
+        for(Bill bill : bills) {
+            if(bill.getStatus().equals(BillStatus.PENDING))
+                pendingBills.add(bill);
         }
-        return billOfThatMonth;
+
+        //If pendingBills not empty
+        return pendingBills.get(0);
+
     }
 
-    public void addBillToPendingBills(Bill bill) {
-        pendingBills.add(bill);
+    public Bill getBillPerMonth(int month, int year) {
+        Bill billOfTheMonth = null;
+        ArrayList<Bill> billsOfTheYear = new ArrayList<Bill>();
+        for(Bill bill : bills) {
+            if(bill.getYear() == year)
+                billsOfTheYear.add(bill);
+        }
+
+        for(Bill bill : billsOfTheYear) {
+            if(bill.getMonth() == month)
+                billOfTheMonth = bill;
+        }
+
+        return billOfTheMonth;
     }
 
-    public void addBillToBillsPaid(Bill bill) {
-        billsPaid.add(bill);
-    }
 
     public void addSeriesToPendingSeries(Series series) {
         pendingSeries.add(series);

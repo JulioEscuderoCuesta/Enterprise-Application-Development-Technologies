@@ -1,43 +1,41 @@
 package es.unican.empresariales.julio.polaflix;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 @Entity
 @Table(name = "series")
-@IdClass(CompoundIdSeries.class)
 public abstract class Series {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private String name;
-    private Date releaseDate;
     private String synopsis;
     private List<String> creators;
     private List<String> actors;
     @OneToOne
     @JoinColumn(name = "categorie")
     private Categorie categorie;
-    @Id
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Season> seasons;
 
-    public Series(String name, Date releaseDate, String synopsis, ArrayList<String> creators, ArrayList<String> actors, Categorie categorie, ArrayList<Season> seasons) {
+    public Series(String name, String synopsis, ArrayList<String> creators, ArrayList<String> actors, Categorie categorie, ArrayList<Season> seasons) {
         this.name = name;
-        this.releaseDate = releaseDate;
         this.synopsis = synopsis;
         this.creators = creators;
         this.actors = actors;
-        this.categorie = categorie;
         this.categorie = categorie;
         this.seasons = seasons;
     }
@@ -49,14 +47,6 @@ public abstract class Series {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getReleaseLocalDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseLocalDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
     }
 
     public String getSynopsis() {
@@ -105,9 +95,5 @@ public abstract class Series {
     @Override
     public int hashCode() {
         return Objects.hash(name, synopsis, creators, actors, seasons);
-    }
-    
-    public void watch() {
-        // TODO:
     }
 }

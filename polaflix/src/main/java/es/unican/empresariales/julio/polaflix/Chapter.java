@@ -1,5 +1,6 @@
 package es.unican.empresariales.julio.polaflix;
 
+import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -20,18 +21,19 @@ public class Chapter {
     private int number;
     private double duration;
     private String link;
-    //private boolean alreadyWatched;
+    private Date releaseDate;
     @Id
     @ManyToOne
     private Season season;
+    //private ArrayList<User> usersWhoWatched;
 
-    public Chapter(String title, String description, int number, double duration, String link, Season season) {
+    public Chapter(String title, String description, int number, double duration, String link, Date releaseDate, Season season) {
         this.title = title;
         this.description = description;
         this.number = number;
         this.duration = duration;
         this.link = link;
-        //alreadyWatched = false;
+        this.releaseDate = releaseDate;
         this.season = season;
     }
 
@@ -72,15 +74,19 @@ public class Chapter {
         this.link = link;
     }
 
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
     public Season getSeason() {
         return season;
     }
 
     /**************************************************************** */
-
-    public void watch() {
-        // TODO:
-    }
 
     @Override
     public boolean equals(Object o) {

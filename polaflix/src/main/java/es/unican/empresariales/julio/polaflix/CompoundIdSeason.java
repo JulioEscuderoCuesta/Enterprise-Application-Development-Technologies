@@ -1,21 +1,19 @@
 package es.unican.empresariales.julio.polaflix;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class CompoundIdSeason {
     
     private String name;
-    private List<Chapter> chapters;
+    private Series series;
 
     private CompoundIdSeason() {
 
     }
 
-    public CompoundIdSeason(String name, ArrayList<Chapter> chapters) {
+    public CompoundIdSeason(String name, Series series) {
         this.name = name;
-        this.chapters = chapters;
+        this.series = series;
     }
 
     public String getName() {
@@ -26,12 +24,12 @@ public class CompoundIdSeason {
         this.name = name;
     }
 
-    public List<Chapter> getChapters() {
-        return chapters;
+    public Series getChapters() {
+        return series;
     }
 
-    public void setChapters(List<Chapter> chapters) {
-        this.chapters = chapters;
+    public void setChapters(Series series) {
+        this.series = series;
     }
 
     /*****************************************************************/
@@ -43,11 +41,11 @@ public class CompoundIdSeason {
         Season that = (Season) o;
         return super.equals(that)
             && Objects.equals(this.name, that.getName())
-            && Objects.equals(this.chapters, that.getChapters());
+            && Objects.equals(this.series, that.getSeries());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, chapters);
+        return Objects.hash(name, series);
     }
 }

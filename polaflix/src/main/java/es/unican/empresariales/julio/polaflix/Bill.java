@@ -11,21 +11,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import es.unican.empresariales.julio.polaflix.repositories.BillRepository;
 
+import javax.persistence.GenerationType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.CascadeType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "bill")
-@IdClass(CompoundIdBill.class)
 public class Bill {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private double totalCost;
     @Id
+    private int month;
+    @Id
+    private int year;
+    private BillStatus status;
     @ManyToOne
+    @Id
     private User user;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<BillLine> lines;
@@ -33,11 +41,12 @@ public class Bill {
     @Autowired
     private BillRepository billRepository;
 
-    public Bill(Date releaseDate,  User user) {
-        this.releaseDate = releaseDate;
-        this.user = user;
-        lines = new ArrayList<BillLine>();
+    public Bill(int month, int year) {
         totalCost = 0.0;
+        this.month = month;
+        this.year = year; 
+        status = BillStatus.INPROGRESS;
+        lines = new ArrayList<BillLine>();
     }
 
     //Getters & Setters
@@ -45,36 +54,45 @@ public class Bill {
         return totalCost;
     }
 
-    public Date getReleaseDate() {
-        return releaseDate;
+    public int getMonth() {
+        return month;
     }
 
-    public Date getPaymentDay() {
-        return paymentDay;
-    }
-
-    public void setPaymentDay(Date paymentDay) {
-        this.paymentDay = paymentDay;
+    public int getYear() {
+        return year;
     }
 
     public User getUser() {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public BillStatus getStatus() {
+        return status;
+    }
+
+    public void setBillStatus(BillStatus status) {
+        this.status = status;
+    }
+
     /**************************************************************** */
 
     public void calculateBill() {
-        if(user.getUserType().equals(UserType.MONTHLYUSER))
-            totalCost = MONTHLYFEE;
+        if(user instanceof MonthlyUser)
+            totalCost = ((MonthlyUser)user).getFee();
         else {
             for(BillLine line: lines) {
-                totalCost += line.getCost();
+                totalCost += line.getChapterCharged().getSeason().getSeries().getCategorie().getPricePerChapter();
             }
         }
     }
 
     public void addBillLine(BillLine line) {
         lines.add(line);
+        line.setBill(this);
     }
 
     public void removeBillLine(BillLine line) {
@@ -88,14 +106,13 @@ public class Bill {
         Bill that = (Bill) o;
         return super.equals(that)
             && Objects.equals(this.totalCost, that.totalCost)
-            && Objects.equals(this.releaseDate, that.releaseDate)
             && Objects.equals(this.user, that.user)
             && Objects.equals(this.lines, that.lines);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(totalCost, releaseDate, user, lines);
+        return Objects.hash(totalCost, user, lines);
     }
 
     public void findByUserId(CompoundIdUser userId) throws IllegalArgumentException {
