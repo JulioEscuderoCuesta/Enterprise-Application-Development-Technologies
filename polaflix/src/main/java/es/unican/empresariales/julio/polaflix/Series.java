@@ -10,11 +10,10 @@ import javax.persistence.Table;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 @Entity
-@Table(name = "series")
+@Table(name = "Series")
 public abstract class Series {
 
     @Id
@@ -26,7 +25,6 @@ public abstract class Series {
     private List<String> creators;
     private List<String> actors;
     @OneToOne
-    @JoinColumn(name = "categorie")
     private Categorie categorie;
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Season> seasons;
@@ -96,4 +94,6 @@ public abstract class Series {
     public int hashCode() {
         return Objects.hash(name, synopsis, creators, actors, seasons);
     }
+
+
 }

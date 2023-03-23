@@ -1,15 +1,9 @@
 package es.unican.empresariales.julio.polaflix;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import es.unican.empresariales.julio.polaflix.repositories.BillRepository;
 
 import javax.persistence.GenerationType;
 import javax.persistence.GeneratedValue;
@@ -19,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
-@Table(name = "bill")
+@Table(name = "Bills")
 public class Bill {
 
     @Id
@@ -27,24 +21,20 @@ public class Bill {
     private Long id;
 
     private double totalCost;
-    @Id
     private int month;
-    @Id
     private int year;
     private BillStatus status;
     @ManyToOne
-    @Id
     private User user;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<BillLine> lines;
 
-    @Autowired
-    private BillRepository billRepository;
 
-    public Bill(int month, int year) {
+    public Bill(int month, int year, User user) {
         totalCost = 0.0;
         this.month = month;
         this.year = year; 
+        this.user = user;
         status = BillStatus.INPROGRESS;
         lines = new ArrayList<BillLine>();
     }
@@ -58,16 +48,20 @@ public class Bill {
         return month;
     }
 
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
     public int getYear() {
         return year;
     }
 
-    public User getUser() {
-        return user;
+    public void setYear(int year) {
+        this.year = year;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public User getUser() {
+        return user;
     }
 
     public BillStatus getStatus() {
@@ -115,9 +109,6 @@ public class Bill {
         return Objects.hash(totalCost, user, lines);
     }
 
-    public void findByUserId(CompoundIdUser userId) throws IllegalArgumentException {
-        List<Bill> bills = billRepository.findByUserId(userId);
-    }
 
     
 }

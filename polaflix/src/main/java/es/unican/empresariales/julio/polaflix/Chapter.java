@@ -1,5 +1,6 @@
 package es.unican.empresariales.julio.polaflix;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -8,10 +9,11 @@ import javax.persistence.Table;
 
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
-@Table(name = "chapter")
+@Table(name = "Chapter")
 @IdClass(CompoundIdChapter.class)
 public class Chapter {
 
@@ -25,7 +27,8 @@ public class Chapter {
     @Id
     @ManyToOne
     private Season season;
-    //private ArrayList<User> usersWhoWatched;
+    @ManyToMany(mappedBy = "chapter")
+    private ArrayList<User> usersWhoWatched;
 
     public Chapter(String title, String description, int number, double duration, String link, Date releaseDate, Season season) {
         this.title = title;

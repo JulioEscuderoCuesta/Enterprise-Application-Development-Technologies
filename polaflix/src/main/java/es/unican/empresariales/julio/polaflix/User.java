@@ -3,13 +3,19 @@ package es.unican.empresariales.julio.polaflix;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 @Entity
 @Table(name = "user")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class User {
 
     @Id
@@ -23,6 +29,7 @@ public abstract class User {
     private List<Series> pendingSeries;
     @OneToMany
     private List<Series> finishedSeries;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private ArrayList<Chapter> chaptersWatched;
     @OneToMany(mappedBy = "user")
     private List<Bill> bills;
@@ -88,7 +95,6 @@ public abstract class User {
 
     public void addBill(Bill bill) {
         bills.add(bill);
-        bill.setUser(this);
     }
 
     public void addChapterWatched(Chapter chapter) {
