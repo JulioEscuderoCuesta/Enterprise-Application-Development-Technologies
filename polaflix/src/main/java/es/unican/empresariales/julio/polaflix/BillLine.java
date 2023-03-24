@@ -18,12 +18,14 @@ public class BillLine {
     
     private Date visualizationDate;
     private Chapter chapterCharged;
+    private double charge;
     @ManyToOne
     private Bill bill;
 
     public BillLine(Date visualizationDate, Chapter chapterCharged) {
         this.visualizationDate = visualizationDate;
         this.chapterCharged = chapterCharged;
+        charge = this.chapterCharged.getSeason().getSeries().getCategorie().getPricePerChapter();
     }
 
     //Getters & Setters
@@ -33,6 +35,10 @@ public class BillLine {
     
     public Chapter getChapterCharged() {
         return chapterCharged;
+    }
+
+    public double getCharge() {
+        return charge;
     }
 
     public Bill getBill() {

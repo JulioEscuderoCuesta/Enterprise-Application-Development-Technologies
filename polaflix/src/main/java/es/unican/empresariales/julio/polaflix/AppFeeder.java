@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,19 +15,19 @@ import es.unican.empresariales.julio.polaflix.repositories.UserRepository;
 @Component
 public class AppFeeder implements CommandLineRunner {
 	
-	@Autowired
+	/*@Autowired
 	protected BillRepository br;
 	@Autowired
-	protected UserRepository ur;
+	protected UserRepository ur;*/
 
 	
 	@Override
 	public void run(String... args) throws Exception {
-		feedDatabase();
+		/*feedDatabase();
 		testViajeRepository();
 		
-		System.out.println("Application feeded");
-	}
+		System.out.println("Application feeded");*/
+	}/* 
 
 	private void feedDatabase() {
 		User u1 = new MonthlyUser("Julio", "1234", "ES66 2100 0418 4012 3456 7891");
@@ -62,6 +61,6 @@ public class AppFeeder implements CommandLineRunner {
 		}
 
 		
-	}
+	}*/
 
 }

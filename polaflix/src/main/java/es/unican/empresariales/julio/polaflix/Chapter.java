@@ -2,6 +2,7 @@ package es.unican.empresariales.julio.polaflix;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -104,6 +105,17 @@ public class Chapter {
     @Override
     public int hashCode() {
         return Objects.hash(title, season);
+    }
+
+    public boolean isTheLast() {
+        if(!getSeason().isTheLast())
+            return false;
+        List<Chapter> chapters = getSeason().getChapters();
+        if(this.equals(getSeason().getChapters().get(chapters.size() - 1)))
+            return true;
+        return false;
+        
+        
     }
 
 }

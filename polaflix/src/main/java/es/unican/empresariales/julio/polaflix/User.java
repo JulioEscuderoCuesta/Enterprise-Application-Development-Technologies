@@ -99,6 +99,9 @@ public abstract class User {
 
     public void addChapterWatched(Chapter chapter) {
         chaptersWatched.add(chapter);
+        if(chapter.isTheLast())
+            addSeriesToFinishedSeries(chapter.getSeason().getSeries());
+        
     }
 
     @Override
@@ -143,9 +146,10 @@ public abstract class User {
         startedSeries.add(series);
     }
 
-    public void addSeriesToFinishedSeries(Series series) {
+    private void addSeriesToFinishedSeries(Series series) {
         finishedSeries.add(series);
     }
+
 
 
 }

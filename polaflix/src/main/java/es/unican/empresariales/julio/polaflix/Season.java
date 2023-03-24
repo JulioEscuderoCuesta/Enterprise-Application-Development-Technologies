@@ -68,4 +68,11 @@ public class Season {
         return Objects.hash(name, series);
     }
 
+    public boolean isTheLast() {
+        List<Season> seasons = getSeries().getSeasons();
+        if(this.equals(getSeries().getSeasons().get(seasons.size() - 1)))
+            return true;
+        return false;
+    }
+
 }

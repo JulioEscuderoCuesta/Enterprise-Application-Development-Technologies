@@ -28,8 +28,7 @@ public class Bill {
     private User user;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<BillLine> lines;
-
-
+    
     public Bill(int month, int year, User user) {
         totalCost = 0.0;
         this.month = month;
@@ -79,7 +78,7 @@ public class Bill {
             totalCost = ((MonthlyUser)user).getFee();
         else {
             for(BillLine line: lines) {
-                totalCost += line.getChapterCharged().getSeason().getSeries().getCategorie().getPricePerChapter();
+                totalCost += line.getCharge();
             }
         }
     }
