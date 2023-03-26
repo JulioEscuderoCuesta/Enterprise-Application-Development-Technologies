@@ -58,8 +58,7 @@ public class Season {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Season that = (Season) o;
-        return super.equals(that)
-            && Objects.equals(this.name, that.name)
+        return Objects.equals(this.name, that.name)
             && Objects.equals(this.series, that.series);
     }
 

@@ -1,6 +1,8 @@
 package es.unican.empresariales.julio.polaflix;
 
 import java.util.Date;
+import java.util.Objects;
+
 import javax.persistence.Table;
 
 import javax.persistence.Entity;
@@ -51,6 +53,20 @@ public class BillLine {
 
     /**************************************************************** */
 
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        BillLine that = (BillLine) o;
+        return Objects.equals(this.visualizationDate, that.visualizationDate)
+            && Objects.equals(this.chapterCharged, that.chapterCharged)
+            && Objects.equals(this.charge, that.charge)
+            && Objects.equals(this.bill, that.bill);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(visualizationDate, chapterCharged, charge, bill);
+    }
 
 }

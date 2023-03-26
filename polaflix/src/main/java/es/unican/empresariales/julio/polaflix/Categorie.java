@@ -21,4 +21,5 @@ public abstract class Categorie {
     public double getPricePerChapter() {
         return pricePerChapter;
     }
+
 }

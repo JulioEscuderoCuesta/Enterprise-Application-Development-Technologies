@@ -97,8 +97,7 @@ public class Bill {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Bill that = (Bill) o;
-        return super.equals(that)
-            && Objects.equals(this.totalCost, that.totalCost)
+        return Objects.equals(this.totalCost, that.totalCost)
             && Objects.equals(this.user, that.user)
             && Objects.equals(this.lines, that.lines);
     }

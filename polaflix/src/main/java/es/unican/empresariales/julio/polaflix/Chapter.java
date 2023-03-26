@@ -97,8 +97,7 @@ public class Chapter {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Chapter that = (Chapter) o;
-        return super.equals(that)
-            && Objects.equals(this.title, that.title)
+        return Objects.equals(this.title, that.title)
             && Objects.equals(this.season, that.season);
     }
 

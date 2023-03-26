@@ -82,8 +82,7 @@ public abstract class Series {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Series that = (Series) o;
-        return super.equals(that)
-            && Objects.equals(this.name, that.name)
+        return Objects.equals(this.name, that.name)
             && Objects.equals(this.synopsis, that.synopsis)
             && Objects.equals(this.creators, that.creators)
             && Objects.equals(this.actors, that.actors)

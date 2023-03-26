@@ -88,8 +88,7 @@ public abstract class User {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         User that = (User) o;
-        return super.equals(that)
-            && Objects.equals(this.name, that.name)
+        return Objects.equals(this.name, that.name)
             && Objects.equals(this.password, that.password);
     }
 
