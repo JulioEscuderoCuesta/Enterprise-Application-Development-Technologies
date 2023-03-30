@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @SpringBootApplication
-@EnableJpaRepositories("es.unican.empresariales.julio.polaflix.repositories")
-@ComponentScan("es.unican.empresariales.julio.polaflix")
+
+//@EnableJpaRepositories("es.unican.empresariales.julio.polaflix.repositories")
+//@ComponentScan("es.unican.empresariales.julio.polaflix.services")
 @EntityScan("es.unican.empresariales.julio.polaflix.entities")
 public class PolaflixApplication {
 

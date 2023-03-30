@@ -1,4 +1,4 @@
-package es.unican.empresariales.julio.polaflix;
+package es.unican.empresariales.julio.polaflix.entities;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -21,5 +21,4 @@ public abstract class Categorie {
     public double getPricePerChapter() {
         return pricePerChapter;
     }
-
 }

@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import es.unican.empresariales.julio.polaflix.repositories.BillRepository;
-import es.unican.empresariales.julio.polaflix.repositories.UserRepository;
+import es.unican.empresariales.julio.polaflix.entities.Bill;
+import es.unican.empresariales.julio.polaflix.entities.BillStatus;
+import es.unican.empresariales.julio.polaflix.entities.MonthlyUser;
+import es.unican.empresariales.julio.polaflix.entities.NormalUser;
+import es.unican.empresariales.julio.polaflix.entities.User;
+
 
 @Component
 public class AppFeeder implements CommandLineRunner {
@@ -27,10 +31,10 @@ public class AppFeeder implements CommandLineRunner {
 		testViajeRepository();
 		
 		System.out.println("Application feeded");*/
-	}/* 
+	}
 
 	private void feedDatabase() {
-		User u1 = new MonthlyUser("Julio", "1234", "ES66 2100 0418 4012 3456 7891");
+		/*User u1 = new MonthlyUser("Julio", "1234", "ES66 2100 0418 4012 3456 7891");
 		User u2 = new NormalUser("Marta", "5678", "ES66 2100 0418 4012 3456 7892");
 		ur.save(u1);
 		ur.save(u2);
@@ -38,10 +42,10 @@ public class AppFeeder implements CommandLineRunner {
 		Bill c = new Bill(5, 2023, u1);
 		Bill c2 = new Bill(6,2023, u1);
 		br.save(c);
-        br.save(c2);
+        br.save(c2);*/
 	}
 
-	private void testViajeRepository() {
+	/*private void testViajeRepository() {
 		
 		SimpleDateFormat dateParser = new SimpleDateFormat("dd-MM-yyyy");
 		Date sample = null;
@@ -58,9 +62,8 @@ public class AppFeeder implements CommandLineRunner {
 	
 		for(Bill b : billsU1) {
 			System.out.println("Importe factura: " + b.getTotalCost());
-		}
+		}*/
 
 		
-	}*/
+	}
 
-}

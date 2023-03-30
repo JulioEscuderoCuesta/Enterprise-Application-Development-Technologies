@@ -1,4 +1,4 @@
-package es.unican.empresariales.julio.polaflix;
+package es.unican.empresariales.julio.polaflix.entities;
 
 import javax.persistence.Entity;
 

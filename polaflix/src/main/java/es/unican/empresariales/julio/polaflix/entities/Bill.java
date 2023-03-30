@@ -1,10 +1,9 @@
-package es.unican.empresariales.julio.polaflix;
+package es.unican.empresariales.julio.polaflix.entities;
 import java.util.Objects;
 import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import javax.persistence.GenerationType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.CascadeType;
@@ -28,6 +27,10 @@ public class Bill {
     private User user;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<BillLine> lines;
+
+    public Bill() {
+        
+    }
     
     public Bill(int month, int year, User user) {
         totalCost = 0.0;

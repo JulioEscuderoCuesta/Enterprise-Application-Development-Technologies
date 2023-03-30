@@ -1,11 +1,10 @@
-package es.unican.empresariales.julio.polaflix;
+package es.unican.empresariales.julio.polaflix.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
