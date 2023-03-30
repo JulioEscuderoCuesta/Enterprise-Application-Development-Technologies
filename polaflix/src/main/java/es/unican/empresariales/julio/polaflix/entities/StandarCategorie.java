@@ -1,6 +1,6 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 @Entity(name = "StandarCategorie")
 public class StandarCategorie extends Categorie {
