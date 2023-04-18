@@ -59,7 +59,7 @@ Un capítulo puede no haber sido visto por ningún usuario o por varios.
     facturas.
     Para los capítulos vistos la relación considerada es _@ManyToMany_ bidireccional. Por una parte el Usuario tiene 0 o varios   
     capítulos vistos y, por otra parte, he considerado guardar qué usuarios han visto qué capítulo. He decidido que sea la entidad 
-    Chapter la que gestione la relación (por ello el 'mappedBy = "usersWhoWhatched" en la entidad User) y **OPERACIONES DE CASCADA**
+    Chapter la que gestione la relación (por ello el 'mappedBy = "usersWhoWhatched" en la entidad User).
 
     - Herencia
 
