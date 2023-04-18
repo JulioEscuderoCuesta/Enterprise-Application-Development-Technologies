@@ -1,15 +1,10 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
 import java.util.LinkedHashSet;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 
-import org.hibernate.mapping.Set;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +15,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 @Entity
-@Table(name = "user")
+@Table(name = "Users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class User {
 

@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-@Table(name = "Chapter")
+@Table(name = "Chapters")
 @IdClass(CompoundIdChapter.class)
 public class Chapter {
 

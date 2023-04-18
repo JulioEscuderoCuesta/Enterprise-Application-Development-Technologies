@@ -11,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 @Entity
-@Table(name = "bill")
+@Table(name = "BillLines")
 public class BillLine {
 
     @Id

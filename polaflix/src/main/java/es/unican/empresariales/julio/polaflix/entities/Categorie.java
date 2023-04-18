@@ -2,6 +2,7 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -11,13 +12,13 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 
 @Entity
-@Table(name = "categorie")
+@Table(name = "Categories")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Categorie {
 
     @Id
     private static double pricePerChapter;
-    @OneToMany
+    @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
     private Set<Series> seriesOfThisCategorie;
 
     public Categorie(double pricePerChapter) {
