@@ -1,12 +1,12 @@
-# Practiac Desarrollo Empresas
+# Práctica Desarrollo Empresas
 
-# Explicación del Modelo de Dominio
+## Explicación del Modelo de Dominio
 
-Clases:
+### Clases:
 - Bill - BillLine - User (MonthlyUser y NormalUser) - Series - Categorie (con sus descendientes) - Season - Chapter
 
 
-Relaciones:
+### Relaciones:
 - Series ---- Categorie
 Aunque una Serie tiene solo una Categoría en un momento dentro del sistema, dicha Serie puede cambiar de categoría a lo largo del tiempo
 (cuando una serie es nueva normalmente pertenece a una categoría más cara), por lo que en el histórico, tiene múltiples categorías. Por esta
@@ -43,4 +43,30 @@ El usuario tiene a su vez una serie de capítulos vistos, para tener en cuenta c
 Un capítulo puede no haber sido visto por ningún usuario o por varios.
 
 
+## Explicación del código
+
+- Clase User
+    - Identificador 
+    Utilizar la contraseña como parte del identificador no es recomendable, debido a que puede visualizarse dependendiendo del diseño 
+    que se siga en la aplicación REST en ciertas partes, como en las urls de identificación de recursos. Por otro lado, el sistema
+    puede tener más de 1 usuario con el mismo nombre. El resto de atributos tampoco considero que sean apropiados, por lo que he 
+    elegido generar un identificador aleatorio para esta clase.
+    - Anotaciones JPA
+    Para la lista de series pendientes, series empezadas, series terminadas y facturas la anotación escogida es
+    _@OneToMany_, debido a que un Usuario puede tener 0 o varias series pendientes, empezadas y/o terminadas y también 0 o varias
+    facturas. 
+    Para los capítulos vistos la relación considerada es _@ManyToMany_ bidireccional. Por una parte el Usuario tiene 0 o varios   
+    capítulos vistos y, por otra parte, he considerado guardar qué usuarios han visto qué capítulo. He decidido que sea la entidad 
+    Chapter la que gestione la relación (por ello el 'mappedBy = "usersWhoWhatched" en la entidad User) y **OPERACIONES DE CASCADA**
+
+- Clase Series
+    - Identificador 
+    Considerando que dos series pueden tener el mismo nombre pero ser distintas y que crear un identificador compuesto con el nombre y
+    cualquier otro atributo no me ha parecido buena idea, he decido generar un identificador de manera aleatoria.
+    - Anotaciones JPA
+    La relación desde Serie a Categorie es _@OneToMany_ bidireccional **CASCADE**. La serie pertenece a una categoría y una categoría
+    contiene numerosas series **FALTA EL CASCADE**. La anotación _mappedBy_ indica que la relación está siendo gestionada por la
+    propiedad _categorie_ en la entidad Series. 
+    La relación entre Serie y Season es _@OneToMany_ bidireccional **CASCADE**. La serie contiene varias temporadas y una temporada
+    pertenece a solo una serie.
 
