@@ -1,11 +1,18 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+
+import org.hibernate.mapping.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
@@ -18,20 +25,22 @@ import jakarta.persistence.OneToMany;
 public abstract class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     private String name;
-    @Id
     private String password;
     private String iban;
     @OneToMany
-    private List<Series> startedSeries;
+    private LinkedHashSet<Series> startedSeries;
     @OneToMany
-    private List<Series> pendingSeries;
+    private LinkedHashSet<Series> pendingSeries;
     @OneToMany
-    private List<Series> finishedSeries;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private ArrayList<Chapter> chaptersWatched;
+    private LinkedHashSet<Series> finishedSeries;
+    @ManyToMany(mappedBy = "usersWhoWatched")
+    private LinkedHashSet<Chapter> chaptersWatched;
     @OneToMany(mappedBy = "user")
-    private List<Bill> bills;
+    private LinkedHashSet<Bill> bills;
 
     /**
      * 
@@ -40,14 +49,14 @@ public abstract class User {
         this.name = name;
         this.password = password;
         this.iban = iban;
-        startedSeries = new ArrayList<Series>();
-        pendingSeries = new ArrayList<Series>();
-        finishedSeries = new ArrayList<Series>();
-        chaptersWatched = new ArrayList<>();
-        bills = new ArrayList<Bill>();
+        startedSeries = new LinkedHashSet<Series>();
+        pendingSeries = new LinkedHashSet<Series>();
+        finishedSeries = new LinkedHashSet<Series>();
+        chaptersWatched = new LinkedHashSet<>();
+        bills = new LinkedHashSet<Bill>();
     }
 
-    //Getters & ArrayListters
+    //Getters & LinkedHashSetters
     public String getName() {
         return name;
     } 
@@ -72,11 +81,11 @@ public abstract class User {
         this.iban = iban;
     }
 
-    public List<Bill> getBills() {
+    public LinkedHashSet<Bill> getBills() {
         return bills;
     }
 
-    public List<Chapter> getChaptersWatched() {
+    public LinkedHashSet<Chapter> getChaptersWatched() {
         return chaptersWatched;
     }
     
@@ -108,20 +117,27 @@ public abstract class User {
     }
 
     public Bill getBillCurrentMonth() {
-        List<Bill> pendingBills = new ArrayList<Bill>();
+        LinkedHashSet<Bill> pendingBills = new LinkedHashSet<Bill>();
         for(Bill bill : bills) {
             if(bill.getStatus().equals(BillStatus.PENDING))
                 pendingBills.add(bill);
         }
+        //TODO: 
+        if(pendingBills.isEmpty())
+            throw new IllegalStateException("");
 
-        //If pendingBills not empty
-        return pendingBills.get(0);
+        Iterator<Bill> iterator = pendingBills.iterator();
+        Bill lastBill = null;
+        while(iterator.hasNext()) {
+            lastBill = iterator.next();
+        }
+        return lastBill;
 
     }
 
     public Bill getBillPerMonth(int month, int year) {
         Bill billOfTheMonth = null;
-        ArrayList<Bill> billsOfTheYear = new ArrayList<Bill>();
+        LinkedHashSet<Bill> billsOfTheYear = new LinkedHashSet<Bill>();
         for(Bill bill : bills) {
             if(bill.getYear() == year)
                 billsOfTheYear.add(bill);
@@ -137,7 +153,8 @@ public abstract class User {
 
 
     public void addSeriesToPendingSeries(Series series) {
-        pendingSeries.add(series);
+        if(!startedSeries.contains(series) && !finishedSeries.contains(series))
+            pendingSeries.add(series);
     }
 
     public void addSeriesToStartedSeries(Series series) {

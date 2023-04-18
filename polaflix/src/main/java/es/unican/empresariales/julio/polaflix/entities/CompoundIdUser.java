@@ -40,8 +40,7 @@ public class CompoundIdUser implements Serializable {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         User that = (User) o;
-        return super.equals(that)
-            && Objects.equals(this.name, that.getName())
+        return Objects.equals(this.name, that.getName())
             && Objects.equals(this.password, that.getPassword());
     }
 

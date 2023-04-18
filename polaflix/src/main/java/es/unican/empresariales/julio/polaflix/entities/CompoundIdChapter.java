@@ -40,8 +40,7 @@ public class CompoundIdChapter implements Serializable{
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Chapter that = (Chapter) o;
-        return super.equals(that)
-            && Objects.equals(this.title, that.getTitle())
+        return Objects.equals(this.title, that.getTitle())
             && Objects.equals(this.season, that.getSeason());
     }
 

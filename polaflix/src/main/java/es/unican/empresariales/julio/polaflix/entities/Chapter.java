@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -27,7 +28,7 @@ public class Chapter {
     @Id
     @ManyToOne
     private Season season;
-    @ManyToMany(mappedBy = "chapter")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private ArrayList<User> usersWhoWatched;
 
     public Chapter(String title, String description, int number, double duration, String link, Date releaseDate, Season season) {

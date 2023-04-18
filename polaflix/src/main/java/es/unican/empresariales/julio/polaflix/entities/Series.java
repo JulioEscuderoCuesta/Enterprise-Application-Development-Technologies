@@ -3,14 +3,16 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 @Entity
 @Table(name = "Series")
 public abstract class Series {
@@ -21,14 +23,14 @@ public abstract class Series {
 
     private String name;
     private String synopsis;
-    private List<String> creators;
-    private List<String> actors;
-    @OneToOne
+    private Set<String> creators;
+    private Set<String> actors;
+    @ManyToOne
     private Categorie categorie;
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Season> seasons;
 
-    public Series(String name, String synopsis, ArrayList<String> creators, ArrayList<String> actors, Categorie categorie, ArrayList<Season> seasons) {
+    public Series(String name, String synopsis, Set<String> creators, Set<String> actors, Categorie categorie, ArrayList<Season> seasons) {
         this.name = name;
         this.synopsis = synopsis;
         this.creators = creators;
@@ -54,11 +56,11 @@ public abstract class Series {
         this.synopsis = synopsis;
     }
 
-    public List<String> getCreator() {
+    public Set<String> getCreator() {
         return creators;
     }
 
-    public List<String> getActors() {
+    public Set<String> getActors() {
         return this.actors;
     }
 
