@@ -46,12 +46,16 @@ Un capítulo puede no haber sido visto por ningún usuario o por varios.
 ## Explicación del código
 
 - Clase User
+
     - Identificador 
+
     Utilizar la contraseña como parte del identificador no es recomendable, debido a que puede visualizarse dependendiendo del diseño 
     que se siga en la aplicación REST en ciertas partes, como en las urls de identificación de recursos. Por otro lado, el sistema
     puede tener más de 1 usuario con el mismo nombre. El resto de atributos tampoco considero que sean apropiados, por lo que he 
     elegido generar un identificador aleatorio para esta clase.
+
     - Anotaciones JPA
+
     Para la lista de series pendientes, series empezadas, series terminadas y facturas la anotación escogida es
     _@OneToMany_, debido a que un Usuario puede tener 0 o varias series pendientes, empezadas y/o terminadas y también 0 o varias
     facturas. 
@@ -60,10 +64,14 @@ Un capítulo puede no haber sido visto por ningún usuario o por varios.
     Chapter la que gestione la relación (por ello el 'mappedBy = "usersWhoWhatched" en la entidad User) y **OPERACIONES DE CASCADA**
 
 - Clase Series
+
     - Identificador 
+
     Considerando que dos series pueden tener el mismo nombre pero ser distintas y que crear un identificador compuesto con el nombre y
     cualquier otro atributo no me ha parecido buena idea, he decido generar un identificador de manera aleatoria.
+    
     - Anotaciones JPA
+
     La relación desde Serie a Categorie es _@OneToMany_ bidireccional **CASCADE**. La serie pertenece a una categoría y una categoría
     contiene numerosas series **FALTA EL CASCADE**. La anotación _mappedBy_ indica que la relación está siendo gestionada por la
     propiedad _categorie_ en la entidad Series. 
