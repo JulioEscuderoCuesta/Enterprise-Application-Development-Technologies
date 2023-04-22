@@ -1,10 +1,8 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -15,7 +13,6 @@ import jakarta.persistence.OneToMany;
 public class Season {
 
     @Id
-    private String name;
     private int number;
     @Id
     @ManyToOne
@@ -26,22 +23,12 @@ public class Season {
     private Season() {
         
     }
-    public Season(String name, int number, Series series, ArrayList<Chapter> chapters) {
-        this.name = name;
+    public Season(int number, Series series) {
         this.number = number;
         this.series = series;
-        this.chapters = chapters;
     }
     
     //Getters & Setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getNumber() {
         return this.number;
     }
@@ -54,6 +41,10 @@ public class Season {
         return this.chapters;
     }
 
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
+    }
+
     /**************************************************************** */
 
     @Override
@@ -61,13 +52,13 @@ public class Season {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Season that = (Season) o;
-        return Objects.equals(this.name, that.name)
+        return Objects.equals(this.number, that.number)
             && Objects.equals(this.series, that.series);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, series);
+        return Objects.hash(number, series);
     }
 
     /**

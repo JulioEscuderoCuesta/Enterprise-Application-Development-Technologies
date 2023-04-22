@@ -1,12 +1,13 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.ManyToMany;
@@ -20,20 +21,20 @@ public class Chapter {
     private String title;
     private String description;
     private int number;
-    private double duration;
+    private Duration duration;
     private String link;
-    private Date releaseDate;
+    private LocalDate releaseDate;
     @Id
     @ManyToOne
     private Season season;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY)
     private ArrayList<User> watchedBy;
 
     private Chapter() {
 
     }
     
-    public Chapter(String title, String description, int number, double duration, String link, Date releaseDate, Season season) {
+    public Chapter(String title, String description, int number, Duration duration, String link, LocalDate releaseDate, Season season) {
         this.title = title;
         this.description = description;
         this.number = number;
@@ -68,7 +69,7 @@ public class Chapter {
         this.number = number;
     }
 
-    public double getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 
@@ -80,11 +81,11 @@ public class Chapter {
         this.link = link;
     }
 
-    public Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 

@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,7 +32,7 @@ public abstract class User {
     private String iban;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Series> startedSeries;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     private List<Series> pendingSeries;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Series> finishedSeries;
@@ -42,7 +41,7 @@ public abstract class User {
     @OneToMany(mappedBy = "who")
     private Set<Bill> bills;
 
-    private User() {
+    protected User() {
 
     }
 
@@ -129,7 +128,8 @@ public abstract class User {
         }
 
         //Mark series as started
-        addSeriesToStartedSeries(chapter.getSeason().getSeries());
+        if(!startedSeries.contains(chapter.getSeason().getSeries()))
+            addSeriesToStartedSeries(chapter.getSeason().getSeries());
 
         //Add chapter to chapters watched and check if it is the last of the series
         chaptersWatched.add(chapter);
@@ -192,10 +192,11 @@ public abstract class User {
     }
 
     public void addSeriesToStartedSeries(Series series) {
-        if(pendingSeries.contains(series)){
+        startedSeries.add(series);
+        if(pendingSeries.contains(series))
             pendingSeries.remove(series);
-            startedSeries.add(series);
-        }
+        //Si el usuario terminó la serie y la vuelve a empezar, ¿cómo marco la serie?
+        
     }
 
     public void addSeriesToFinishedSeries(Series series) {

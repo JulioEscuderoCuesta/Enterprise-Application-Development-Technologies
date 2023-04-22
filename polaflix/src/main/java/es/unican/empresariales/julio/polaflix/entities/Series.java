@@ -1,6 +1,5 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -8,12 +7,12 @@ import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.CascadeType;
+ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 @Entity
-public abstract class Series {
+public class Series {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,13 +31,12 @@ public abstract class Series {
 
     }
 
-    public Series(String name, String synopsis, Set<String> creators, Set<String> actors, Categorie categorie, ArrayList<Season> seasons) {
+    public Series(String name, String synopsis, Set<String> creators, Set<String> actors, Categorie categorie) {
         this.name = name;
         this.synopsis = synopsis;
         this.creators = creators;
         this.actors = actors;
         this.categorie = categorie;
-        this.seasons = seasons;
     }
 
     //Getters & ArrayListters
@@ -76,6 +74,10 @@ public abstract class Series {
 
     public List<Season> getSeasons() {
         return seasons;
+    }
+
+    public void setSeasons(List<Season> seasons) {
+        this.seasons = seasons;
     }
 
     /**************************************************************** */

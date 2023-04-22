@@ -4,24 +4,24 @@ import java.util.Objects;
 
 public class CompoundIdSeason {
     
-    private String name;
+    private int number;
     private Series series;
 
     private CompoundIdSeason() {
 
     }
 
-    public CompoundIdSeason(String name, Series series) {
-        this.name = name;
+    public CompoundIdSeason(int number, Series series) {
+        this.number = number;
         this.series = series;
     }
 
-    public String getName() {
-        return name;
+    public int getNumber() {
+        return number;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public Series getChapters() {
@@ -40,12 +40,12 @@ public class CompoundIdSeason {
         if(o == null || getClass() != o.getClass()) return false;
         Season that = (Season) o;
         return super.equals(that)
-            && Objects.equals(this.name, that.getName())
+            && Objects.equals(this.number, that.getNumber())
             && Objects.equals(this.series, that.getSeries());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, series);
+        return Objects.hash(number, series);
     }
 }

@@ -13,7 +13,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public abstract class Categorie {
+public class Categorie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

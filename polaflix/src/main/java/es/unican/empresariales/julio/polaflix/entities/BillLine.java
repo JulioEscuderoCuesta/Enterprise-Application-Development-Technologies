@@ -3,9 +3,8 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import jakarta.persistence.Table;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,10 +18,10 @@ public class BillLine {
     
     private LocalDate visualizationDate;
     private int chapterNumber;
-    private String seasonName;
+    private int seasonNumber;
     private String seriesName;
     private double charge;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Bill bill;
 
     private BillLine() {
@@ -32,7 +31,7 @@ public class BillLine {
     public BillLine(LocalDate localDate, Chapter chapterCharged) {
         this.visualizationDate = localDate;
         this.chapterNumber = chapterCharged.getNumber();
-        this.seasonName = chapterCharged.getSeason().getName();
+        this.seasonNumber = chapterCharged.getSeason().getNumber();
         this.seriesName = chapterCharged.getSeason().getSeries().getName();
         charge = chapterCharged.getSeason().getSeries().getCategorie().getPricePerChapter();
     }
@@ -50,8 +49,8 @@ public class BillLine {
         return seriesName;
     }
 
-    public String getSeasonName() {
-        return seasonName;
+    public int getSeasonNumber() {
+        return seasonNumber;
     }
 
     public double getCharge() {
