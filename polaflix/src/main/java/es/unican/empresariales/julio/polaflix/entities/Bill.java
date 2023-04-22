@@ -1,89 +1,94 @@
 package es.unican.empresariales.julio.polaflix.entities;
 import java.util.Objects;
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-@Table(name = "Bills")
 public class Bill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private double totalCost;
-    private int month;
-    private int year;
+    private int whichMonth;
+    private int whichYear;
     private BillStatus status;
     @ManyToOne
-    private User user;
+    private User who;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<BillLine> lines;
+    private List<BillLine> lines;
 
-    public Bill() {
+    private Bill() {
         
     }
     
-    public Bill(int month, int year, User user) {
-        totalCost = 0.0;
-        this.month = month;
-        this.year = year; 
-        this.user = user;
+    public Bill(int whichMonth, int whichYear, User who, BillLine line) {
+        this.whichMonth = whichMonth;
+        this.whichYear = whichYear; 
+        this.who = who;
         status = BillStatus.INPROGRESS;
         lines = new ArrayList<BillLine>();
+        lines.add(line);
     }
 
     //Getters & Setters
     public double getTotalCost() {
-        return totalCost;
+        return calculateBill();
     }
 
-    public int getMonth() {
-        return month;
+    public int getWhichMonth() {
+        return whichMonth;
     }
 
-    public void setMonth(int month) {
-        this.month = month;
+    public void setWhichMonth(int whichMonth) {
+        this.whichMonth = whichMonth;
     }
 
-    public int getYear() {
-        return year;
+    public int getWhichYear() {
+        return whichYear;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setWhichYear(int whichYear) {
+        this.whichYear = whichYear;
     }
 
     public User getUser() {
-        return user;
+        return who;
+    }
+
+    public void setUser(User who) {
+        this.who = who;
     }
 
     public BillStatus getStatus() {
         return status;
     }
 
-    public void setBillStatus(BillStatus status) {
+    public void setStatus(BillStatus status) {
         this.status = status;
     }
 
     /**************************************************************** */
 
-    public void calculateBill() {
-        if(user instanceof MonthlyUser)
-            totalCost = ((MonthlyUser)user).getFee();
+    public double calculateBill() {
+        double totalCost = 0.0;
+        if(who instanceof MonthlyUser)
+            totalCost = ((MonthlyUser)who).getFee();
         else {
             for(BillLine line: lines) {
                 totalCost += line.getCharge();
             }
         }
+        return totalCost;
     }
 
     public void addBillLine(BillLine line) {
@@ -100,14 +105,15 @@ public class Bill {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Bill that = (Bill) o;
-        return Objects.equals(this.totalCost, that.totalCost)
-            && Objects.equals(this.user, that.user)
+        return Objects.equals(this.whichMonth, that.whichMonth)
+            && Objects.equals(this.whichYear, that.whichYear)
+            && Objects.equals(this.who, that.who)
             && Objects.equals(this.lines, that.lines);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(totalCost, user, lines);
+        return Objects.hash(whichMonth, whichYear, who, lines);
     }
 
 

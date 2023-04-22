@@ -8,13 +8,11 @@ import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 @Entity
-@Table(name = "Series")
 public abstract class Series {
 
     @Id
@@ -29,6 +27,10 @@ public abstract class Series {
     private Categorie categorie;
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Season> seasons;
+
+    private Series() {
+
+    }
 
     public Series(String name, String synopsis, Set<String> creators, Set<String> actors, Categorie categorie, ArrayList<Season> seasons) {
         this.name = name;

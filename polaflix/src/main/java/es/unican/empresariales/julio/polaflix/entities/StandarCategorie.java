@@ -1,4 +1,4 @@
-package es.unican.empresariales.julio.polaflix.entities;
+/*package es.unican.empresariales.julio.polaflix.entities;
 
 
 public class StandarCategorie extends Categorie {
@@ -8,4 +8,4 @@ public class StandarCategorie extends Categorie {
     public StandarCategorie() {
         super(PRICESTANDARCATEGORIE);
     }
-}
+}*/

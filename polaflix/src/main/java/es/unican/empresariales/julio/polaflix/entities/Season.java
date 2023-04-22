@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 @Entity
 @IdClass(CompoundIdSeason.class)
-@Table(name = "Seasons")
 public class Season {
 
     @Id
@@ -24,6 +23,9 @@ public class Season {
     @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters;
 
+    private Season() {
+        
+    }
     public Season(String name, int number, Series series, ArrayList<Chapter> chapters) {
         this.name = name;
         this.number = number;
@@ -68,6 +70,10 @@ public class Season {
         return Objects.hash(name, series);
     }
 
+    /**
+     * Determines if this is the last season of its series.
+     * @return true if this is the last season of its series, false otherwise.
+     */
     public boolean isTheLast() {
         List<Season> seasons = getSeries().getSeasons();
         if(this.equals(getSeries().getSeasons().get(seasons.size() - 1)))

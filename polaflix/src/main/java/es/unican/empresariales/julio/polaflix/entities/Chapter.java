@@ -7,14 +7,12 @@ import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-@Table(name = "Chapters")
 @IdClass(CompoundIdChapter.class)
 public class Chapter {
 
@@ -29,8 +27,12 @@ public class Chapter {
     @ManyToOne
     private Season season;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private ArrayList<User> usersWhoWatched;
+    private ArrayList<User> watchedBy;
 
+    private Chapter() {
+
+    }
+    
     public Chapter(String title, String description, int number, double duration, String link, Date releaseDate, Season season) {
         this.title = title;
         this.description = description;
@@ -106,6 +108,10 @@ public class Chapter {
         return Objects.hash(title, season);
     }
 
+    /**
+    * Determines if this is the last chapter of its season.
+    * @return true if this is the last chapter of its season, false otherwise.
+    */
     public boolean isTheLast() {
         if(!getSeason().isTheLast())
             return false;
@@ -113,8 +119,6 @@ public class Chapter {
         if(this.equals(getSeason().getChapters().get(chapters.size() - 1)))
             return true;
         return false;
-        
-        
     }
 
 }

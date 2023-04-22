@@ -1,10 +1,15 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
-import java.util.LinkedHashSet;
+import java.util.Set;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,16 +31,20 @@ public abstract class User {
     private String name;
     private String password;
     private String iban;
-    @OneToMany
-    private LinkedHashSet<Series> startedSeries;
-    @OneToMany
-    private LinkedHashSet<Series> pendingSeries;
-    @OneToMany
-    private LinkedHashSet<Series> finishedSeries;
-    @ManyToMany(mappedBy = "usersWhoWatched")
-    private LinkedHashSet<Chapter> chaptersWatched;
-    @OneToMany(mappedBy = "user")
-    private LinkedHashSet<Bill> bills;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Series> startedSeries;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Series> pendingSeries;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Series> finishedSeries;
+    @ManyToMany(mappedBy = "watchedBy")
+    private Set<Chapter> chaptersWatched;
+    @OneToMany(mappedBy = "who")
+    private Set<Bill> bills;
+
+    private User() {
+
+    }
 
     /**
      * 
@@ -44,14 +53,14 @@ public abstract class User {
         this.name = name;
         this.password = password;
         this.iban = iban;
-        startedSeries = new LinkedHashSet<Series>();
-        pendingSeries = new LinkedHashSet<Series>();
-        finishedSeries = new LinkedHashSet<Series>();
-        chaptersWatched = new LinkedHashSet<>();
-        bills = new LinkedHashSet<Bill>();
+        startedSeries = new ArrayList<>();
+        pendingSeries = new ArrayList<>();
+        finishedSeries = new ArrayList<>();
+        chaptersWatched = new HashSet<>();
+        bills = new HashSet<Bill>();
     }
 
-    //Getters & LinkedHashSetters
+    //Getters & Setters
     public String getName() {
         return name;
     } 
@@ -76,11 +85,11 @@ public abstract class User {
         this.iban = iban;
     }
 
-    public LinkedHashSet<Bill> getBills() {
+    public Set<Bill> getBills() {
         return bills;
     }
 
-    public LinkedHashSet<Chapter> getChaptersWatched() {
+    public Set<Chapter> getChaptersWatched() {
         return chaptersWatched;
     }
     
@@ -95,24 +104,46 @@ public abstract class User {
             && Objects.equals(this.password, that.password);
     }
 
-    public void addBill(Bill bill) {
-        bills.add(bill);
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, password);
     }
 
+    /**
+     * Adds a chapter that has been watched to the list of watched chapters for this user.
+     * Also creates a new bill line with the date of today and the given chapter and adds it to the current month's bill.
+     * If there is no current month's bill, it creates a new bill for the current month and adds the new bill line to it.
+     * Additionally, marks the series that the chapter belongs to as started and adds the chapter to the list of watched chapters.
+     * If the chapter is the last one in the series, it also adds the series to the list of finished series for the user.
+     * @param chapter The chapter that has been watched.
+     */
     public void addChapterWatched(Chapter chapter) {
+        //charge chapter
+        BillLine newBillLine = new BillLine(LocalDate.now(), chapter);
+        Bill currentBill = getBillCurrentMonth();
+        if(currentBill== null) {
+            LocalDate currentDate = LocalDate.now();
+            currentBill = new Bill(currentDate.getMonthValue(), currentDate.getYear(), this, newBillLine); 
+        } else {
+            currentBill.addBillLine(newBillLine);
+        }
+
+        //Mark series as started
+        addSeriesToStartedSeries(chapter.getSeason().getSeries());
+
+        //Add chapter to chapters watched and check if it is the last of the series
         chaptersWatched.add(chapter);
         if(chapter.isTheLast())
             addSeriesToFinishedSeries(chapter.getSeason().getSeries());
         
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, password);
-    }
-
+    /**
+     * Gets user's bill of the currentMonth
+     * @return
+     */
     public Bill getBillCurrentMonth() {
-        LinkedHashSet<Bill> pendingBills = new LinkedHashSet<Bill>();
+        Set<Bill> pendingBills = new HashSet<Bill>();
         for(Bill bill : bills) {
             if(bill.getStatus().equals(BillStatus.PENDING))
                 pendingBills.add(bill);
@@ -130,16 +161,24 @@ public abstract class User {
 
     }
 
+    /**
+     * 
+     * Returns the bill for the specified month and year. If no bill is found for the specified month and year,
+     * null is returned.
+     * @param month The month for which the bill is requested (1-12).
+     * @param year The year for which the bill is requested.
+     * @return The bill for the specified month and year, or null if no bill is found.
+     */
     public Bill getBillPerMonth(int month, int year) {
         Bill billOfTheMonth = null;
-        LinkedHashSet<Bill> billsOfTheYear = new LinkedHashSet<Bill>();
+        Set<Bill> billsOfTheYear = new HashSet<Bill>();
         for(Bill bill : bills) {
-            if(bill.getYear() == year)
+            if(bill.getWhichYear() == year)
                 billsOfTheYear.add(bill);
         }
 
         for(Bill bill : billsOfTheYear) {
-            if(bill.getMonth() == month)
+            if(bill.getWhichMonth() == month)
                 billOfTheMonth = bill;
         }
 
@@ -153,11 +192,17 @@ public abstract class User {
     }
 
     public void addSeriesToStartedSeries(Series series) {
-        startedSeries.add(series);
+        if(pendingSeries.contains(series)){
+            pendingSeries.remove(series);
+            startedSeries.add(series);
+        }
     }
 
-    private void addSeriesToFinishedSeries(Series series) {
-        finishedSeries.add(series);
+    public void addSeriesToFinishedSeries(Series series) {
+        if(startedSeries.contains(series)) {
+            startedSeries.remove(series);
+            finishedSeries.add(series);
+        }
     }
 
 

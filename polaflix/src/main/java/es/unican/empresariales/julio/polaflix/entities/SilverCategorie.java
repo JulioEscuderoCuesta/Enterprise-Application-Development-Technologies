@@ -1,4 +1,4 @@
-package es.unican.empresariales.julio.polaflix.entities;
+/*package es.unican.empresariales.julio.polaflix.entities;
 
 
 public class SilverCategorie extends Categorie {
@@ -8,4 +8,4 @@ public class SilverCategorie extends Categorie {
     public SilverCategorie() {
         super(PRICESILVERCATEGORIE);
     }
-}
+}*/

@@ -1,6 +1,6 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Table;
@@ -11,32 +11,47 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 @Entity
-@Table(name = "BillLines")
 public class BillLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id; 
     
-    private Date visualizationDate;
-    private Chapter chapterCharged;
+    private LocalDate visualizationDate;
+    private int chapterNumber;
+    private String seasonName;
+    private String seriesName;
     private double charge;
     @ManyToOne
     private Bill bill;
 
-    public BillLine(Date visualizationDate, Chapter chapterCharged) {
-        this.visualizationDate = visualizationDate;
-        this.chapterCharged = chapterCharged;
-        charge = this.chapterCharged.getSeason().getSeries().getCategorie().getPricePerChapter();
+    private BillLine() {
+        
+    }
+
+    public BillLine(LocalDate localDate, Chapter chapterCharged) {
+        this.visualizationDate = localDate;
+        this.chapterNumber = chapterCharged.getNumber();
+        this.seasonName = chapterCharged.getSeason().getName();
+        this.seriesName = chapterCharged.getSeason().getSeries().getName();
+        charge = chapterCharged.getSeason().getSeries().getCategorie().getPricePerChapter();
     }
 
     //Getters & Setters
-    public Date getVisualizationDate() {
+    public LocalDate getVisualizationDate() {
         return visualizationDate;
     }
     
-    public Chapter getChapterCharged() {
-        return chapterCharged;
+    public int getChapterNumber() {
+        return chapterNumber;
+    }
+
+    public String getSeriesName() {
+        return seriesName;
+    }
+
+    public String getSeasonName() {
+        return seasonName;
     }
 
     public double getCharge() {
@@ -59,14 +74,13 @@ public class BillLine {
         if(o == null || getClass() != o.getClass()) return false;
         BillLine that = (BillLine) o;
         return Objects.equals(this.visualizationDate, that.visualizationDate)
-            && Objects.equals(this.chapterCharged, that.chapterCharged)
             && Objects.equals(this.charge, that.charge)
             && Objects.equals(this.bill, that.bill);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(visualizationDate, chapterCharged, charge, bill);
+        return Objects.hash(visualizationDate, charge, bill);
     }
 
 }
