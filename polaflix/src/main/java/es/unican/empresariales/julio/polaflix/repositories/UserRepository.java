@@ -5,5 +5,6 @@ import es.unican.empresariales.julio.polaflix.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+
     
 }
