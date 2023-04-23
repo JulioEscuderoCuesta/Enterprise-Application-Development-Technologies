@@ -17,9 +17,8 @@
 - Series ---- Categorie
 
 Aunque una Serie tiene solo una Categoría en un momento dentro del sistema, dicha Serie puede cambiar de categoría a lo largo del tiempo (cuando una serie es nueva normalmente pertenece a una categoría más cara), por lo que en el histórico, tiene múltiples categorías. Por esta misma explación, una misma categoría puede "contener" muchas series (al menos 1, ya que no tendría sentido tener una Categoría en el sistema de la que no forme parte ninguna Serie). 
-Así mismo, Categoría tiene una subclase por cada tipo de categoría en el sistema. Categoría tiene de atributo el precio, que es el mismo para todas las series de la categoría, por eso es a nivel de clase.
 
-- Series ---- Season ---- Categorie
+- Series ---- Season ---- Chapter
 
 Estas 3 clases tienen relación de composición entre sí, de manera que si una serie deja de existir en el sistema, también dejarían de existir sus temporadas y sus capítulos. Aunque no aparece en la descripción del sistema específicamente, he decidido almacenar en el capítulo la fecha de emisión. De esta forma, se puede obtener fácilmente la fecha de emisión de la temporada a la que pertenece y también de la propia serie (buscando el primer capítulo).
 
@@ -52,20 +51,25 @@ Un capítulo puede no haber sido visto por ningún usuario o por varios.
     - Anotaciones JPA
 
     Para la lista de series pendientes, series empezadas, series terminadas y facturas la anotación escogida es
-    _@OneToMany_, debido a que un Usuario puede tener 0 o varias series pendientes, empezadas y/o terminadas y también 0 o varias
-    facturas.
-    La anotación _mappedBy = "user"_ en la propiedad _bills_ indica que la propiedad _"user"_ que se encuentra en la Entidad _Bill_
+    _@ManyToMany_ bidireccional, debido a que un Usuario puede tener 0 o varias series pendientes, empezadas y/o terminadas y también 0
+    o varias facturas y una serie puede encontrarse en estas listas de varios usuarios. La única operación que propago es la de 
+    _MERGE_, debido a que las de _REMOVE_ y _PERSIST_ no tienen sentido, ya que no se quiere borrar o guardar una serie cuando se 
+    borra o guarda una serie de o en alguna de las listas.
+    La anotación _mappedBy = "who"_ en la propiedad _bills_ indica que la propiedad _"user"_ que se encuentra en la Entidad _Bill_
     es la que mapea la relación. Por tanto, habrá una columna de clave externa que apunte al usuario de la factura para todas las 
-    facturas.
+    facturas. Propago las operaciones de _MERGE_ y _PERSIST_ porque quiero guardar las facturas del usuario cuando guardo el usuario,
+    pero no quiero eliminarlas del sistema cuando el usuario se borre. Tanto las facturas como los capítulos vistos los cargo bajo 
+    demanda (ya que no se necesitan cuando se carga la información del usuario). No obstante, se especifica que cuando el usuario 
+    accede a su espacio personal (se carga su información) se debe mostrar las series empezadas, pendientes y terminadas, por lo que
+    cargo estas colecciones con _EAGER_
     Para los capítulos vistos la relación considerada es _@ManyToMany_ bidireccional. Por una parte el Usuario tiene 0 o varios   
     capítulos vistos y, por otra parte, he considerado guardar qué usuarios han visto qué capítulo. He decidido que sea la entidad 
-    Chapter la que gestione la relación (por ello el 'mappedBy = "usersWhoWhatched" en la entidad User).
+    User la que gestione la relación (por ello el 'mappedBy = "chaptersWatched" en la entidad Chapter).
 
     - Herencia
 
     En este caso he decidido aplicar el patrón Single Table Inheritance. De este modo, solo conservo la entidad User y añado una
-    columna para indicar el precio de la tarifa del usuario. En el caso de ser un usuario mensual este campo tendrá un valor, mientras
-    que en el caso de ser un usuario normal, este campo estará a null.
+    columna para indicar el tipo de usuario en concreto, que puede ser MonthlyUser o NormalUser.
 
 - Clase Series
 
@@ -82,21 +86,23 @@ Un capítulo puede no haber sido visto por ningún usuario o por varios.
     La relación entre Serie y Season es _@OneToMany_ bidireccional. La serie contiene varias temporadas y una temporada
     pertenece a solo una serie. La anotación _mappedBY = "series"_ indica que la entidad Season es la que contendrá una columna de 
     clave externa que apuntará a la serie a la que pertenece la temporada. Por otro lado, cualquier operación realizada sobre la 
-    serie, se verá reflejada en sus temporadas y su eliminación supondrá la eliminación de estas.
+    serie, se verá reflejada en sus temporadas y su eliminación supondrá la eliminación de estas (con el CascadeType.ALL) y las 
+    temporadas se cargan bajo demanda (el usuario puede querer ver información de la serie pero no específicamente de cada temporada).
 
 - Clase Season
 
     - Identificador 
 
     Una serie no puede tener dos temporadas con el mismo nombre. Por tanto se ha construido un identificador compuesto formado por 
-    el atributo _name_ y el atributo _series_.
+    el atributo _number_ y el atributo _series_.
     
     - Anotaciones JPA
 
     La relación entre Season y Chapter es _@OneToMany_ bidireccional. La temporada contiene varios capítulos y una capítulo
     pertenece a solo una temporada. La anotación _mappedBY = "season"_ indica que la entidad Chapter es la que contendrá una column
     de clave externa que apuntará a la temporada a la que pertenece el capítulo. Por otro lado, cualquier operación realizada sobre
-    la temporada, se verá reflejada en sus capítulos y su eliminación supondrá la eliminación de estas.
+    la temporada, se verá reflejada en sus capítulos y su eliminación supondrá la eliminación de estas. La carga de los capítulos
+    es bajo demanda también.
 
 - Clase Chapter
 
@@ -113,21 +119,15 @@ Un capítulo puede no haber sido visto por ningún usuario o por varios.
 
     - Identificador 
 
-    Como el único dato relevante de la categoría hasta este momento es el precio y es la principal diferencia entre los distintos
-    tipos de categoría, se ha elegido este atributo como identificador de la clase.
+    Los únicos atributos de la categoría son su nombre y el precio por capítulo. He considerado que no puede haber dos categorías en
+    el sistema con el mismo nombre, por lo que he escogido _name_ como identificador.
 
     - Anotaciones JPA
 
     La relación entre Categorie y Series se ha explicado anteriormente. En el lado de Categorie la anotación es _@OneToMany_
     indicando que una categoria se relaciona con muchas series. La anotación _mappedBy = "categorie"_ indica que la entidad Serie
-    es la propietaria de la relación y que contendrá una columna de clave externa que apunte a su categoría. Además la anotación 
-    _cascade = CascadeType.ALL_ indica que cualquier operación que se realice sobre una categoría, se verá reflejada en la serie 
-    de dicha categoría.
-
-    - Herencia
-
-    El patrón aplicado en este caso ha sido el de _Single Table Inheritance_. De este modo, solo se tendrá la entidad Categorie y se 
-    tendrá en la columna _pricePerChapter_ el precio por capítulo, determinado en las subclases. 
+    es la propietaria de la relación y que contendrá una columna de clave externa que apunte a su categoría. Para ver las series
+    que pertenecen a una categoría en concreto, habrá que hacer la solicitud de manera explícita (carga bajo demanda).
 
 - Clase Bill
 
@@ -146,6 +146,8 @@ Un capítulo puede no haber sido visto por ningún usuario o por varios.
     clave externa, de modo que en esta entidad se haga referencia a la factura a la que pertenece cada línea. Además de esto, si 
     se realiza cualquier modificación sobre la factura, sus líneas de factura sufren esta modificación y, en caso de eliminarse la
     factura, se eliminarían todas sus líneas de factura.
+    En este caso sí que cargo de manera inmediata las líneas de factura de la factura. Considero que si se solicita ver una factura,
+    se quiere de manera implícita ver los cargos que forman esta factura.
 
 - Clase BillLine
 
