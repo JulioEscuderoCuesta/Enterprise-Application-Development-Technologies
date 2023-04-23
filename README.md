@@ -7,7 +7,7 @@
 - BillLine 
 - User (MonthlyUser y NormalUser) 
 - Series 
-- Categorie (con sus descendientes) 
+- Categorie
 - Season 
 - Chapter
 
