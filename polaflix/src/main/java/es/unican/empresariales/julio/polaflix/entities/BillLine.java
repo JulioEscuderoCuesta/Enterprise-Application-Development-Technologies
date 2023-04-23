@@ -36,6 +36,15 @@ public class BillLine {
         charge = chapterCharged.getSeason().getSeries().getCategorie().getPricePerChapter();
     }
 
+    public BillLine(LocalDate localDate, Chapter chapterCharged, Bill bill) {
+        this.visualizationDate = localDate;
+        this.chapterNumber = chapterCharged.getNumber();
+        this.seasonNumber = chapterCharged.getSeason().getNumber();
+        this.seriesName = chapterCharged.getSeason().getSeries().getName();
+        this.bill = bill;
+        charge = chapterCharged.getSeason().getSeries().getCategorie().getPricePerChapter();
+    }
+
     //Getters & Setters
     public LocalDate getVisualizationDate() {
         return visualizationDate;

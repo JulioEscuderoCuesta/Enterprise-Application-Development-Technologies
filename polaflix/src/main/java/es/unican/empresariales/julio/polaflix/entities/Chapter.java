@@ -3,8 +3,10 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,8 +29,8 @@ public class Chapter {
     @Id
     @ManyToOne
     private Season season;
-    @ManyToMany(fetch = FetchType.LAZY)
-    private ArrayList<User> watchedBy;
+    @ManyToMany(mappedBy = "chaptersWatched")
+    private Set<User> watchedBy;
 
     private Chapter() {
 
@@ -42,6 +44,7 @@ public class Chapter {
         this.link = link;
         this.releaseDate = releaseDate;
         this.season = season;
+        this.watchedBy = new HashSet<User>();
     }
 
     //Getters & Setters
@@ -91,6 +94,10 @@ public class Chapter {
 
     public Season getSeason() {
         return season;
+    }
+
+    public Set<User> getWatchedBy() {
+        return watchedBy;
     }
 
     /**************************************************************** */

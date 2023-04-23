@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
@@ -30,15 +31,15 @@ public abstract class User {
     private String name;
     private String password;
     private String iban;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Series> startedSeries;
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Series> pendingSeries;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Series> finishedSeries;
-    @ManyToMany(mappedBy = "watchedBy")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Set<Chapter> chaptersWatched;
-    @OneToMany(mappedBy = "who")
+    @OneToMany(mappedBy = "who", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Set<Bill> bills;
 
     protected User() {
@@ -118,46 +119,46 @@ public abstract class User {
      */
     public void addChapterWatched(Chapter chapter) {
         //charge chapter
-        BillLine newBillLine = new BillLine(LocalDate.now(), chapter);
+        BillLine newBillLine;
         Bill currentBill = getBillCurrentMonth();
-        if(currentBill== null) {
+        if(currentBill == null) {
             LocalDate currentDate = LocalDate.now();
-            currentBill = new Bill(currentDate.getMonthValue(), currentDate.getYear(), this, newBillLine); 
+            newBillLine = new BillLine(LocalDate.now(), chapter);
+            currentBill = new Bill(currentDate.getMonthValue(), currentDate.getYear(), this, newBillLine);
+            newBillLine.setBill(currentBill);
+            bills.add(currentBill); 
         } else {
+            newBillLine = new BillLine(LocalDate.now(), chapter, currentBill);
             currentBill.addBillLine(newBillLine);
         }
+
+        //Adds chapter to list of chapters watched
+        chaptersWatched.add(chapter);
+
+        //Add this user to list of users who whatched the chapter
+        chapter.getWatchedBy().add(this);
 
         //Mark series as started
         if(!startedSeries.contains(chapter.getSeason().getSeries()))
             addSeriesToStartedSeries(chapter.getSeason().getSeries());
 
-        //Add chapter to chapters watched and check if it is the last of the series
-        chaptersWatched.add(chapter);
+        //Check if it is the last of the series
         if(chapter.isTheLast())
             addSeriesToFinishedSeries(chapter.getSeason().getSeries());
         
     }
 
     /**
-     * Gets user's bill of the currentMonth
+     * Gets user's bill of the current month
      * @return
      */
     public Bill getBillCurrentMonth() {
-        Set<Bill> pendingBills = new HashSet<Bill>();
+        LocalDate currentDate = LocalDate.now();
         for(Bill bill : bills) {
-            if(bill.getStatus().equals(BillStatus.PENDING))
-                pendingBills.add(bill);
+            if(bill.getWhichYear() == currentDate.getYear() && bill.getWhichMonth() == currentDate.getMonthValue())
+                return bill;
         }
-        //TODO: 
-        if(pendingBills.isEmpty())
-            throw new IllegalStateException("");
-
-        Iterator<Bill> iterator = pendingBills.iterator();
-        Bill lastBill = null;
-        while(iterator.hasNext()) {
-            lastBill = iterator.next();
-        }
-        return lastBill;
+        return null;
 
     }
 
@@ -186,11 +187,20 @@ public abstract class User {
     }
 
 
+    /**
+    * Add a series to the pending series list if it does not exist in the started or finished series lists.
+    * @param series the series to be added to the pending list.
+    */
     public void addSeriesToPendingSeries(Series series) {
         if(!startedSeries.contains(series) && !finishedSeries.contains(series))
             pendingSeries.add(series);
     }
 
+    /**
+    * Add a series to the started series list, and remove it from the pending series list if it exists.
+    * If the user has already finished the series and starts it again, it will be marked as started.
+    * @param series the series to be added to the started list.
+    */
     public void addSeriesToStartedSeries(Series series) {
         startedSeries.add(series);
         if(pendingSeries.contains(series))
@@ -198,12 +208,14 @@ public abstract class User {
         //Si el usuario terminó la serie y la vuelve a empezar, ¿cómo marco la serie?
         
     }
-
+    /**
+    * Add a series to the finished series list.
+    * @param series the series to be added to the finished list.
+    */
     public void addSeriesToFinishedSeries(Series series) {
-        if(startedSeries.contains(series)) {
             startedSeries.remove(series);
             finishedSeries.add(series);
-        }
+        
     }
 
 

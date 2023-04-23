@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.CascadeType;
@@ -23,7 +24,7 @@ public class Bill {
     private BillStatus status;
     @ManyToOne
     private User who;
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<BillLine> lines;
 
     private Bill() {
@@ -106,13 +107,12 @@ public class Bill {
         Bill that = (Bill) o;
         return Objects.equals(this.whichMonth, that.whichMonth)
             && Objects.equals(this.whichYear, that.whichYear)
-            && Objects.equals(this.who, that.who)
-            && Objects.equals(this.lines, that.lines);
+            && Objects.equals(this.who, that.who);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(whichMonth, whichYear, who, lines);
+        return Objects.hash(whichMonth, whichYear, who);
     }
 
 
