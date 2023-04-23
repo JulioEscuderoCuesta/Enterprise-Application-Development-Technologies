@@ -3,6 +3,7 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.util.List;
 import java.util.Objects;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -17,7 +18,7 @@ public class Season {
     @Id
     @ManyToOne
     private Series series;
-    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Chapter> chapters;
 
     private Season() {

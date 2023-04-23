@@ -190,8 +190,9 @@ public class AppFeeder implements CommandLineRunner {
 		
 		User user1 = ur.findById((long) 1).get();
 		User user2 = ur.findById((long) 2).get();
-		System.out.println("Factura usuario 1: " + user1.getBillCurrentMonth().calculateBill());
-		System.out.println("Factura usuario 2: " + user2.getBillCurrentMonth().calculateBill());
+		//System.out.println(user1.getBills().size());
+		//System.out.println("Factura usuario 1: " + user1.getBillCurrentMonth().calculateBill());
+		//System.out.println("Factura usuario 2: " + user2.getBillCurrentMonth().calculateBill());
 		
 
 	}

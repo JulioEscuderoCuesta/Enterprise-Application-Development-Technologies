@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
  import jakarta.persistence.CascadeType;
@@ -24,7 +25,7 @@ public class Series {
     private Set<String> actors;
     @ManyToOne
     private Categorie categorie;
-    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Season> seasons;
 
     private Series() {
@@ -37,6 +38,7 @@ public class Series {
         this.creators = creators;
         this.actors = actors;
         this.categorie = categorie;
+        categorie.addSeries(this);
     }
 
     //Getters & ArrayListters

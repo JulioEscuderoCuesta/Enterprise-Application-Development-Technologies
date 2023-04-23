@@ -4,7 +4,6 @@ import java.util.Set;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,15 +30,15 @@ public abstract class User {
     private String name;
     private String password;
     private String iban;
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Series> startedSeries;
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Series> pendingSeries;
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Series> finishedSeries;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Chapter> chaptersWatched;
-    @OneToMany(mappedBy = "who", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "who", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private Set<Bill> bills;
 
     protected User() {
@@ -83,6 +82,18 @@ public abstract class User {
 
     public void setIban(String iban) {
         this.iban = iban;
+    }
+
+    public List<Series> getPendingSeries() {
+        return pendingSeries;
+    }
+
+    public List<Series> getStartedSeries() {
+        return startedSeries;
+    }
+
+    public List<Series> getFinishedSeries() {
+        return finishedSeries;
     }
 
     public Set<Bill> getBills() {

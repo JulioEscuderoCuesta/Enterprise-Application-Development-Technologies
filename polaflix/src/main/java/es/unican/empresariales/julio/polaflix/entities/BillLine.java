@@ -21,7 +21,7 @@ public class BillLine {
     private int seasonNumber;
     private String seriesName;
     private double charge;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Bill bill;
 
     private BillLine() {

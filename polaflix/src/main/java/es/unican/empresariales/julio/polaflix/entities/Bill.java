@@ -1,6 +1,8 @@
 package es.unican.empresariales.julio.polaflix.entities;
 import java.util.Objects;
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -25,7 +27,7 @@ public class Bill {
     @ManyToOne
     private User who;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<BillLine> lines;
+    private Set<BillLine> lines;
 
     private Bill() {
         
@@ -36,7 +38,7 @@ public class Bill {
         this.whichYear = whichYear; 
         this.who = who;
         status = BillStatus.INPROGRESS;
-        lines = new ArrayList<BillLine>();
+        lines = new HashSet<>();
         lines.add(line);
     }
 
@@ -75,6 +77,10 @@ public class Bill {
 
     public void setStatus(BillStatus status) {
         this.status = status;
+    }
+
+    public Set<BillLine> getBillLines() {
+        return lines;
     }
 
     /**************************************************************** */

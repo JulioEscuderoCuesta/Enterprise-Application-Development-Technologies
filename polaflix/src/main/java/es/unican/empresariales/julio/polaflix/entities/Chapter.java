@@ -29,7 +29,7 @@ public class Chapter {
     @Id
     @ManyToOne
     private Season season;
-    @ManyToMany(mappedBy = "chaptersWatched")
+    @ManyToMany(mappedBy = "chaptersWatched", fetch = FetchType.LAZY)
     private Set<User> watchedBy;
 
     private Chapter() {
