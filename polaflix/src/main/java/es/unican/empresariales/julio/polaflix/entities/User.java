@@ -1,6 +1,13 @@
 package es.unican.empresariales.julio.polaflix.entities;
 
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import es.unican.empresariales.julio.polaflix.Views;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,20 +32,28 @@ public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private Long id;
     
+    @JsonView({Views.UserView.class})
     private String name;
     private String password;
     private String iban;
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JsonView({Views.UserView.class})
     private List<Series> startedSeries;
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JsonView({Views.UserView.class})
     private List<Series> pendingSeries;
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JsonView({Views.UserView.class})
     private List<Series> finishedSeries;
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JsonView({Views.UserChaptersWatched.class})
     private Set<Chapter> chaptersWatched;
     @OneToMany(mappedBy = "who", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonView({Views.UserBills.class})
     private Set<Bill> bills;
 
     protected User() {

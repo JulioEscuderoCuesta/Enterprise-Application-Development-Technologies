@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -28,6 +30,7 @@ public class Chapter {
     private LocalDate releaseDate;
     @Id
     @ManyToOne
+    @JsonManagedReference
     private Season season;
     @ManyToMany(mappedBy = "chaptersWatched", fetch = FetchType.LAZY)
     private Set<User> watchedBy;

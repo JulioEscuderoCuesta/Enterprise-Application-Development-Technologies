@@ -2,6 +2,10 @@ package es.unican.empresariales.julio.polaflix.entities;
 
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.CascadeType;
@@ -17,8 +21,10 @@ public class Season {
     private int number;
     @Id
     @ManyToOne
+    @JsonManagedReference
     private Series series;
     @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Chapter> chapters;
 
     private Season() {

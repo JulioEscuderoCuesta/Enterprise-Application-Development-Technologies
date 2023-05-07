@@ -3,6 +3,8 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ public class BillLine {
     private String seriesName;
     private double charge;
     @ManyToOne
+    @JsonManagedReference
     private Bill bill;
 
     private BillLine() {

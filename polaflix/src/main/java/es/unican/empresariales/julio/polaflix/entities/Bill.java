@@ -1,6 +1,10 @@
 package es.unican.empresariales.julio.polaflix.entities;
 import java.util.Objects;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,8 +29,10 @@ public class Bill {
     private int whichYear;
     private BillStatus status;
     @ManyToOne
+    @JsonManagedReference
     private User who;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonBackReference
     private Set<BillLine> lines;
 
     private Bill() {
@@ -81,6 +87,10 @@ public class Bill {
 
     public Set<BillLine> getBillLines() {
         return lines;
+    }
+
+    public void setBillLines(Set<BillLine> lines) {
+        this.lines = lines;
     }
 
     /**************************************************************** */
