@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.unican.empresariales.julio.polaflix.entities.Bill;
 import es.unican.empresariales.julio.polaflix.entities.Chapter;
 import es.unican.empresariales.julio.polaflix.entities.Series;
 import es.unican.empresariales.julio.polaflix.entities.User;
@@ -20,7 +21,7 @@ public class UserService {
      @Autowired
      protected SeriesRepository sr;
     
-     public Optional<User> getUserById(Long id) {
+     public Optional<User> findUser(Long id) {
           return ur.findById(id);
      }
 
@@ -28,28 +29,30 @@ public class UserService {
           return Optional.of(ur.save(user));
      }
 
-     public void deleteUser(User user) {
-          ur.delete(user);
-     }
-
-     public void updateUser(User user) {
-          ur.save(user);
+     public Optional<User> deleteUser(Long userId) {
+          Optional<User> optionalUser = ur.findById(userId);
+          User user;
+          if(optionalUser.isPresent()) {
+               user = optionalUser.get();
+               ur.delete(user);
+               return optionalUser;
+          }
+          return null;
      }
 
      @Transactional
-     public boolean watchChapter(Long userId, Long seriesId) {
-          Optional<User> u = ur.findById(userId);
-          Optional<Series> s = sr.findById(seriesId);
+     public Optional<User> updateUser(Long userId, User userDetail) {
+          Optional<User> optionalUser = ur.findById(userId);
           User user;
-          Series series;
-          if(u.isPresent() && s.isPresent()) {
-               user = u.get();
-               series = s.get();
-               user.addSeriesToPendingSeries(series);
-               return true;
+          if(optionalUser.isPresent()) {
+               user = optionalUser.get();
+               user.setName(userDetail.getName());
+               user.setPassword(userDetail.getPassword());
+               user.setIban(userDetail.getIban());
           }
-          return false;  
+          return optionalUser;
      }
+
 
      @Transactional
      public boolean addSeriesToPendingSeries(Long userId, Long seriesId) {
@@ -63,7 +66,7 @@ public class UserService {
                user.addSeriesToPendingSeries(series);
                return true;
           }
-          return false;  
+          return false;
      }
 
      @Transactional
@@ -83,16 +86,18 @@ public class UserService {
      }
 
      @Transactional
-     public void watchChapter(Long userId, Chapter chapter) {
+     public boolean watchChapter(Long userId, Chapter chapter) {
           Optional<User> u = ur.findById(userId);
-          Optional<Chapter> c= sr.findChapter(chapter.getTitle(), chapter.getSeason().getNumber(), chapter.getSeason().getSeries().getName());
+          Optional<Chapter> c = sr.findChapter(chapter.getTitle(), chapter.getSeason().getNumber(), chapter.getSeason().getSeries().getName());
           User user;
           Chapter chapterWatched;
           if(u.isPresent() && c.isPresent()) {
                user = u.get();
                chapterWatched = c.get();
-               user.addChapterWatched(chapterWatched);          
+               user.addChapterWatched(chapterWatched);   
+               return true;       
           }
+          return false;
      }
     
 }

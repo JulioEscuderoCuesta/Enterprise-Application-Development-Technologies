@@ -28,6 +28,7 @@ import es.unican.empresariales.julio.polaflix.entities.User;
 import es.unican.empresariales.julio.polaflix.repositories.BillRepository;
 import es.unican.empresariales.julio.polaflix.repositories.UserRepository;
 import es.unican.empresariales.julio.polaflix.services.BillService;
+import es.unican.empresariales.julio.polaflix.services.SeriesService;
 import es.unican.empresariales.julio.polaflix.services.UserService;
 
 @RestController
@@ -38,12 +39,13 @@ public class UserController {
     private UserService us;
     @Autowired
     private BillService bs;
+    @Autowired
+    private SeriesService ss;
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUser(@PathVariable Long userId) {
-        Optional<User> user = us.getUserById(userId);
+        Optional<User> user = us.findUser(userId);
         ResponseEntity<User> result;
-
         if (user.isPresent()) {
             result = ResponseEntity.ok(user.get());
         }
@@ -57,7 +59,6 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody @JsonView(Views.NewUser.class) User newUser) {
         Optional<User> user = us.createNewUser(newUser);
         ResponseEntity<User> result;
-
         if (user.isPresent()) {
             result = ResponseEntity.ok(user.get());
         }
@@ -69,13 +70,10 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<User> deleteUser(@PathVariable Long userId) {
-        Optional<User> optionalUser = us.getUserById(userId);
+        Optional<User> optionalUser = us.deleteUser(userId);
         ResponseEntity<User> result;
-        User user;
         if(optionalUser.isPresent()) {
-            user = optionalUser.get();
-            us.deleteUser(user);
-            result = ResponseEntity.ok(user);
+            result = ResponseEntity.ok(optionalUser.get());
         }
         else {
             result = ResponseEntity.notFound().build();
@@ -85,16 +83,10 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<User> updateUser(@RequestParam Long userId, @RequestBody User userDetail) {
-        Optional<User> user = us.getUserById(userId);
+        Optional<User> user = us.updateUser(userId, userDetail);
         ResponseEntity<User> result;
-        User updatedUser;
         if(user.isPresent()) {
-            updatedUser = user.get();
-            updatedUser.setName(userDetail.getName());
-            updatedUser.setPassword(userDetail.getPassword());
-            updatedUser.setIban(userDetail.getIban());
-            us.updateUser(updatedUser);
-            result = ResponseEntity.ok(updatedUser);
+            result = ResponseEntity.ok(user.get());
         }
         else 
             result = ResponseEntity.notFound().build();
@@ -115,36 +107,12 @@ public class UserController {
         return result;
     }
 
-    
-    @PutMapping("/{userId}/bills/{billId}")
-    public ResponseEntity<Bill> updateBill(@PathVariable Long userId, @PathVariable Long billId, @RequestBody Bill billDetail) {
-        Optional<Bill> optionalBill = bs.getBillById(billId);
-        ResponseEntity<Bill> result;
-        Bill bill;
-        if(optionalBill.isPresent()) {
-            bill = optionalBill.get();
-            bill.setStatus(billDetail.getStatus());
-            bill.setWhichMonth(billDetail.getWhichMonth());
-            bill.setWhichYear(billDetail.getWhichYear());
-            bill.setBillLines(billDetail.getBillLines());
-            bill.setUser(billDetail.getUser());
-            result = ResponseEntity.ok(bill);
-        }
-        else {
-            result = ResponseEntity.notFound().build();
-        }
-        return result;
-    }
-
     @DeleteMapping("/{userId}/bills/{billId}")
     public ResponseEntity<Bill> deletedBill(@PathVariable Long userId, @PathVariable Long billId) {
-        Optional<Bill> optionalBill = bs.getBillById(billId);
+        Optional<Bill> optionalBill = bs.deleteBill(billId);
         ResponseEntity<Bill> result;
-        Bill bill;
         if(optionalBill.isPresent()) {
-            bill = optionalBill.get();
-            bs.deleteBill(bill);
-            result = ResponseEntity.ok(bill);
+            result = ResponseEntity.ok(optionalBill.get());
         }
         else {
             result = ResponseEntity.notFound().build();
@@ -152,9 +120,17 @@ public class UserController {
         return result;
     }
 
+    @PutMapping("/{userId}/pendingSeries/{seriesId}")
+    public boolean addSeriesToPendingSeries(@PathVariable Long userId, @PathVariable Long seriesId) {
+        return us.addSeriesToPendingSeries(userId, seriesId);
+        
+        
+    }
+
+
     @PutMapping("/{userId}/chaptersWatched")
-    public void watchChapter(@RequestParam Long userId, @RequestBody Chapter chapter) {
-        us.watchChapter(userId, chapter);
+    public boolean watchChapter(@RequestParam Long userId, @RequestBody Chapter chapter) {
+        return us.watchChapter(userId, chapter);
     }
 
     
