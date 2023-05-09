@@ -5,7 +5,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
+import es.unican.empresariales.julio.polaflix.Views;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,14 +23,20 @@ public class Series {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonView({Views.SeeSeriesDetailsView.class, Views.AddSeriesView.class})
     private String name;
+    @JsonView({Views.AddSeriesView.class})
     private String synopsis;
+    @JsonView({Views.AddSeriesView.class})
     private Set<String> creators;
+    @JsonView({Views.AddSeriesView.class})
     private Set<String> actors;
     @ManyToOne
+    @JsonView({Views.SeeSeriesDetailsView.class})
     private Categorie categorie;
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonBackReference
+    @JsonView({Views.SeeSeriesDetailsView.class})
     private List<Season> seasons;
 
     private Series() {

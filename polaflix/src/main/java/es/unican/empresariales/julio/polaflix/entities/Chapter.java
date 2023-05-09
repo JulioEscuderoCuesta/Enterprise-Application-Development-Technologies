@@ -9,7 +9,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
+import es.unican.empresariales.julio.polaflix.Views;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -22,10 +24,14 @@ import jakarta.persistence.ManyToOne;
 public class Chapter {
 
     @Id
+    @JsonView(Views.SeeSeriesDetailsView.class)
     private String title;
+    @JsonView(Views.SeeSeriesDetailsView.class)
     private String description;
+    @JsonView(Views.SeeSeriesDetailsView.class)
     private int number;
     private Duration duration;
+    @JsonView(Views.SeeSeriesDetailsView.class)
     private String link;
     private LocalDate releaseDate;
     @Id

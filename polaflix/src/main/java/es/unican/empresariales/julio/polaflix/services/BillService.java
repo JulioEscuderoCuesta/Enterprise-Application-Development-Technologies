@@ -28,18 +28,5 @@ public class BillService {
     public Optional<Set<Bill>> findByUserId(Long userId) {
         return br.findByUserId(userId);
     }
-
-    @Transactional
-    public Optional<Bill> deleteBill(Long billId) {
-        Optional<Bill> optionalBill = br.findById(billId);
-        Bill bill = null;
-        if(optionalBill.isPresent()) {
-            bill = optionalBill.get();
-            br.delete(bill);
-            return optionalBill;
-        }
-        return null;
-
-    }
     
 }

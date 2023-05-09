@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import es.unican.empresariales.julio.polaflix.Views;
 import es.unican.empresariales.julio.polaflix.entities.Chapter;
 import es.unican.empresariales.julio.polaflix.entities.Season;
 import es.unican.empresariales.julio.polaflix.entities.Series;
@@ -35,6 +38,7 @@ public class SeriesController {
     }
 
     @GetMapping("/{seriesId}")
+    @JsonView(Views.SeeSeriesDetailsView.class)
     public ResponseEntity<Series> getSeries(@PathVariable Long seriesId) {
         Optional<Series> series = ss.findSeries(seriesId);
         ResponseEntity<Series> result;
@@ -49,6 +53,7 @@ public class SeriesController {
     }
 
     @GetMapping("/{seriesId}/seasons")
+    @JsonView(Views.SeeSeriesDetailsView.class)
     public ResponseEntity<List<Season>> getSeasons(@RequestParam Long seriesId) {
         Optional<List<Season>> optionalSeasons = ss.findAllSeasonsBySeriesId(seriesId);
         ResponseEntity<List<Season>> result;
@@ -62,6 +67,7 @@ public class SeriesController {
     }
 
     @GetMapping("/{seriesId}/seasons/{seasonNumber}/chapters")
+    @JsonView(Views.SeeSeriesDetailsView.class)
     public ResponseEntity<List<Chapter>> getSeasons(@RequestParam String seasonNumber, @RequestParam Long seriesId) {
         Optional<List<Chapter>> optionalChapters = ss.findAllChapterBySeasonNumberAndBySeriesId(seasonNumber, seriesId);
         ResponseEntity<List<Chapter>> result;

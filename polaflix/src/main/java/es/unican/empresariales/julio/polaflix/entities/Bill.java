@@ -4,6 +4,9 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import es.unican.empresariales.julio.polaflix.Views;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,7 +28,9 @@ public class Bill {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonView(Views.SeeChargesView.class)
     private int whichMonth;
+    @JsonView(Views.SeeChargesView.class)
     private int whichYear;
     private BillStatus status;
     @ManyToOne
@@ -33,6 +38,7 @@ public class Bill {
     private User who;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonBackReference
+    @JsonView(Views.SeeChargesView.class)
     private Set<BillLine> lines;
 
     private Bill() {

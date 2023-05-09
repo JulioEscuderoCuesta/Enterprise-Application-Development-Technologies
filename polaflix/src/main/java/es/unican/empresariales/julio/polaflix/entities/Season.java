@@ -5,7 +5,9 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
+import es.unican.empresariales.julio.polaflix.Views;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.CascadeType;
@@ -18,6 +20,7 @@ import jakarta.persistence.OneToMany;
 public class Season {
 
     @Id
+    @JsonView(Views.SeeSeriesDetailsView.class)
     private int number;
     @Id
     @ManyToOne
@@ -25,6 +28,7 @@ public class Season {
     private Series series;
     @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonBackReference
+    @JsonView(Views.SeeSeriesDetailsView.class)
     private List<Chapter> chapters;
 
     private Season() {

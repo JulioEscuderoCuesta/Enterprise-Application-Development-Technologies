@@ -4,7 +4,9 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import es.unican.empresariales.julio.polaflix.Views;
 
@@ -37,7 +39,9 @@ public abstract class User {
     
     @JsonView({Views.UserView.class})
     private String name;
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String iban;
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JsonView({Views.UserView.class})

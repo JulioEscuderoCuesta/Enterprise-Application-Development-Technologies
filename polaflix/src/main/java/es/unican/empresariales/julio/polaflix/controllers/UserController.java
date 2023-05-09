@@ -43,6 +43,7 @@ public class UserController {
     private SeriesService ss;
 
     @GetMapping("/{userId}")
+    @JsonView(Views.UserView.class)
     public ResponseEntity<User> getUser(@PathVariable Long userId) {
         Optional<User> user = us.findUser(userId);
         ResponseEntity<User> result;
@@ -95,24 +96,12 @@ public class UserController {
 
     
     @GetMapping("/{userId}/bills")
+    @JsonView(Views.SeeChargesView.class)
     public ResponseEntity<Set<Bill>> getBillsByUserId(@PathVariable Long userId) {
         Optional<Set<Bill>> list = bs.findByUserId(userId);
         ResponseEntity<Set<Bill>> result;
         if(list.isPresent()) {
             result = ResponseEntity.ok(list.get());
-        }
-        else {
-            result = ResponseEntity.notFound().build();
-        }
-        return result;
-    }
-
-    @DeleteMapping("/{userId}/bills/{billId}")
-    public ResponseEntity<Bill> deletedBill(@PathVariable Long userId, @PathVariable Long billId) {
-        Optional<Bill> optionalBill = bs.deleteBill(billId);
-        ResponseEntity<Bill> result;
-        if(optionalBill.isPresent()) {
-            result = ResponseEntity.ok(optionalBill.get());
         }
         else {
             result = ResponseEntity.notFound().build();
