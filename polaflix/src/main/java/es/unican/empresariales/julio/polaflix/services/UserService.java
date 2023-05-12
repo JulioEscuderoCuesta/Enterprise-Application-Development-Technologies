@@ -1,5 +1,6 @@
 package es.unican.empresariales.julio.polaflix.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -123,5 +124,9 @@ public class UserService {
           }
           return null;
     }
+
+     public Optional<List<Series>> getPendingSeriesByUserId(Long userId) {
+          return ur.findPendingSeriesByUserId(userId);
+     }
     
 }

@@ -1,5 +1,6 @@
 package es.unican.empresariales.julio.polaflix.controllers;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,8 +23,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import es.unican.empresariales.julio.polaflix.Views;
 import es.unican.empresariales.julio.polaflix.entities.Bill;
 import es.unican.empresariales.julio.polaflix.entities.Chapter;
+import es.unican.empresariales.julio.polaflix.entities.Series;
 import es.unican.empresariales.julio.polaflix.entities.User;
 import es.unican.empresariales.julio.polaflix.services.UserService;
+import io.micrometer.core.ipc.http.HttpSender.Response;
 
 @RestController
 @RequestMapping("/users")
@@ -38,12 +41,10 @@ public class UserController {
     public ResponseEntity<User> getUser(@PathVariable Long userId) {
         Optional<User> user = us.findUser(userId);
         ResponseEntity<User> result;
-        if (user.isPresent()) {
-            result = ResponseEntity.ok(user.get());
-        }
-        else {
-            result = ResponseEntity.notFound().build();
-        }
+        if (user.isPresent()) 
+            result = ResponseEntity.ok(user.get());        
+        else 
+            result = ResponseEntity.notFound().build();       
         return result;
     }
 
@@ -51,12 +52,10 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User newUser) {
         Optional<User> user = us.createNewUser(newUser);
         ResponseEntity<User> result;
-        if (user.isPresent()) {
-            result = ResponseEntity.ok(user.get());
-        }
-        else {
+        if (user.isPresent()) 
+            result = ResponseEntity.ok(user.get());       
+        else 
             result = ResponseEntity.notFound().build();
-        }
         return result;
     }
 
@@ -64,12 +63,10 @@ public class UserController {
     public ResponseEntity<User> deleteUser(@PathVariable Long userId) {
         Optional<User> optionalUser = us.deleteUser(userId);
         ResponseEntity<User> result;
-        if(optionalUser.isPresent()) {
-            result = ResponseEntity.ok(optionalUser.get());
-        }
-        else {
+        if(optionalUser.isPresent()) 
+            result = ResponseEntity.ok(optionalUser.get());        
+        else 
             result = ResponseEntity.notFound().build();
-        }
         return result;
     }
 
@@ -77,9 +74,8 @@ public class UserController {
     public ResponseEntity<User> updateUser(@RequestParam Long userId, @RequestBody User userDetail) {
         Optional<User> user = us.updateUser(userId, userDetail);
         ResponseEntity<User> result;
-        if(user.isPresent()) {
+        if(user.isPresent()) 
             result = ResponseEntity.ok(user.get());
-        }
         else 
             result = ResponseEntity.notFound().build();
         return result;
@@ -91,12 +87,10 @@ public class UserController {
     public ResponseEntity<Set<Bill>> getBillsByUserId(@PathVariable Long userId) {
         Optional<Set<Bill>> list = us.findBillsByUserId(userId);
         ResponseEntity<Set<Bill>> result;
-        if(list.isPresent()) {
+        if(list.isPresent()) 
             result = ResponseEntity.ok(list.get());
-        }
-        else {
+        else 
             result = ResponseEntity.notFound().build();
-        }
         return result;
     }
 
@@ -105,13 +99,23 @@ public class UserController {
     public ResponseEntity<Bill> getBillsByUserId(@PathVariable Long userId, @PathVariable Long billId) {
         Optional<Bill> list = us.findBillByUserId(userId, billId);
         ResponseEntity<Bill> result;
-        if(list.isPresent()) {
+        if(list.isPresent()) 
             result = ResponseEntity.ok(list.get());
-        }
-        else {
+        else 
             result = ResponseEntity.notFound().build();
-        }
         return result;
+    }
+
+    @GetMapping("/{userId}/pendingSeries")
+    public ResponseEntity<List<Series>> getPendingSeries(@PathVariable Long userId) {
+        Optional<List<Series>> optionalPendingSeries = us.getPendingSeriesByUserId(userId);
+        ResponseEntity<List<Series>> result;
+        if(optionalPendingSeries.isPresent()) 
+            result = ResponseEntity.ok(optionalPendingSeries.get());
+        else
+            result = ResponseEntity.notFound().build();
+        return result;
+        
     }
 
     @PutMapping("/{userId}/pendingSeries/{seriesId}")
