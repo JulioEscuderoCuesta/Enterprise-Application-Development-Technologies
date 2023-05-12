@@ -1,6 +1,7 @@
 package es.unican.empresariales.julio.polaflix.services;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,5 +100,28 @@ public class UserService {
           }
           return false;
      }
+
+     @Transactional
+    public Optional<Set<Bill>> findBillsByUserId(Long userId) {
+          Optional<User> optionalUser = ur.findById(userId);
+          if(optionalUser.isPresent()) {
+               Optional<Set<Bill>> optionalBill = ur.findBillsByUserId(optionalUser.get());
+               if(optionalBill.isPresent()) 
+                    return optionalBill;
+          }
+          return null;
+    }
+
+    @Transactional
+    public Optional<Bill> findBillByUserId(Long userId, Long billId) {
+          Optional<User> optionalUser = ur.findById(userId);
+          Optional<Bill> optionalBill;
+          if(optionalUser.isPresent()) {
+               optionalBill = ur.findBillByUserId(optionalUser.get(), billId);
+               if(optionalBill.isPresent()) 
+                    return optionalBill;
+          }
+          return null;
+    }
     
 }

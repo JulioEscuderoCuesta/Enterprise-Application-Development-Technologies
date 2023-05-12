@@ -3,6 +3,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import es.unican.empresariales.julio.polaflix.Views;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -13,9 +17,11 @@ import jakarta.persistence.OneToMany;
 public class Categorie {
 
     @Id
+    @JsonView(Views.AddSeriesView.class)
     private String name;
     private double pricePerChapter;
     @OneToMany(mappedBy = "categorie", fetch = FetchType.LAZY)
+    @JsonBackReference
     private Set<Series> seriesOfThisCategorie;
 
     private Categorie() {

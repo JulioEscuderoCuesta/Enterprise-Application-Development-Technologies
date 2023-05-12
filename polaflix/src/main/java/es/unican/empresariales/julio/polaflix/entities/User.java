@@ -57,7 +57,7 @@ public abstract class User {
     private Set<Chapter> chaptersWatched;
     @OneToMany(mappedBy = "who", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JsonBackReference
-    @JsonView({Views.UserBills.class})
+    @JsonView({Views.SeeChargesView.class})
     private Set<Bill> bills;
 
     protected User() {

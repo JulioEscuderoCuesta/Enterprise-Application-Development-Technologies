@@ -20,15 +20,15 @@ import jakarta.persistence.OneToMany;
 public class Season {
 
     @Id
-    @JsonView(Views.SeeSeriesDetailsView.class)
+    @JsonView(Views.SelectSeriesToWatch.class)
     private int number;
     @Id
     @ManyToOne
     @JsonManagedReference
     private Series series;
     @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JsonView(Views.SeeSeriesDetailsView.class)
+    @JsonManagedReference
+    @JsonView(Views.SelectSeriesToWatch.class)
     private List<Chapter> chapters;
 
     private Season() {

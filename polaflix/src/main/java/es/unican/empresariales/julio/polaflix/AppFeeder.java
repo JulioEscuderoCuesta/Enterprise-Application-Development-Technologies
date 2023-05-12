@@ -5,14 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import es.unican.empresariales.julio.polaflix.entities.Bill;
 import es.unican.empresariales.julio.polaflix.entities.Categorie;
 import es.unican.empresariales.julio.polaflix.entities.Chapter;
 import es.unican.empresariales.julio.polaflix.entities.MonthlyUser;
@@ -188,8 +186,8 @@ public class AppFeeder implements CommandLineRunner {
 
 	private void testDatabase() {
 		
-		User user1 = ur.findById((long) 1).get();
-		User user2 = ur.findById((long) 2).get();
+		//User user1 = ur.findById((long) 1).get();
+		//User user2 = ur.findById((long) 2).get();
 		//System.out.println(user1.getBills().size());
 		//System.out.println("Factura usuario 1: " + user1.getBillCurrentMonth().calculateBill());
 		//System.out.println("Factura usuario 2: " + user2.getBillCurrentMonth().calculateBill());

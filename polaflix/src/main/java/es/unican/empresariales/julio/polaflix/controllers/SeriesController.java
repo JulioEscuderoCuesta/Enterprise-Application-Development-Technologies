@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -18,6 +19,7 @@ import es.unican.empresariales.julio.polaflix.entities.Season;
 import es.unican.empresariales.julio.polaflix.entities.Series;
 import es.unican.empresariales.julio.polaflix.services.SeriesService;
 
+@RestController
 @RequestMapping("/series")
 public class SeriesController {
     
@@ -25,6 +27,7 @@ public class SeriesController {
     private SeriesService ss;
 
     @GetMapping
+    @JsonView(Views.AddSeriesView.class)
     public ResponseEntity<List<Series>> getSeries() {
         Optional<List<Series>> optionalSeries = ss.findAllSeries();
         ResponseEntity<List<Series>> result;
@@ -38,7 +41,7 @@ public class SeriesController {
     }
 
     @GetMapping("/{seriesId}")
-    @JsonView(Views.SeeSeriesDetailsView.class)
+    @JsonView(Views.SelectSeriesToWatch.class)
     public ResponseEntity<Series> getSeries(@PathVariable Long seriesId) {
         Optional<Series> series = ss.findSeries(seriesId);
         ResponseEntity<Series> result;
@@ -53,8 +56,8 @@ public class SeriesController {
     }
 
     @GetMapping("/{seriesId}/seasons")
-    @JsonView(Views.SeeSeriesDetailsView.class)
-    public ResponseEntity<List<Season>> getSeasons(@RequestParam Long seriesId) {
+    @JsonView(Views.SelectSeriesToWatch.class)
+    public ResponseEntity<List<Season>> getSeasons(@PathVariable Long seriesId) {
         Optional<List<Season>> optionalSeasons = ss.findAllSeasonsBySeriesId(seriesId);
         ResponseEntity<List<Season>> result;
         if(optionalSeasons.isPresent()) {
@@ -67,8 +70,8 @@ public class SeriesController {
     }
 
     @GetMapping("/{seriesId}/seasons/{seasonNumber}/chapters")
-    @JsonView(Views.SeeSeriesDetailsView.class)
-    public ResponseEntity<List<Chapter>> getSeasons(@RequestParam String seasonNumber, @RequestParam Long seriesId) {
+    @JsonView(Views.SelectSeriesToWatch.class)
+    public ResponseEntity<List<Chapter>> getSeasons(@PathVariable String seasonNumber, @PathVariable Long seriesId) {
         Optional<List<Chapter>> optionalChapters = ss.findAllChapterBySeasonNumberAndBySeriesId(seasonNumber, seriesId);
         ResponseEntity<List<Chapter>> result;
         if(optionalChapters.isPresent()) {

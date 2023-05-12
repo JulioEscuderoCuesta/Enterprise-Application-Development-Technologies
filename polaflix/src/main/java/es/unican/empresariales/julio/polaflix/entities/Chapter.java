@@ -24,14 +24,14 @@ import jakarta.persistence.ManyToOne;
 public class Chapter {
 
     @Id
-    @JsonView(Views.SeeSeriesDetailsView.class)
+    @JsonView(Views.SelectSeriesToWatch.class)
     private String title;
-    @JsonView(Views.SeeSeriesDetailsView.class)
+    @JsonView(Views.SelectSeriesToWatch.class)
     private String description;
-    @JsonView(Views.SeeSeriesDetailsView.class)
+    @JsonView(Views.SelectSeriesToWatch.class)
     private int number;
     private Duration duration;
-    @JsonView(Views.SeeSeriesDetailsView.class)
+    @JsonView(Views.SelectSeriesToWatch.class)
     private String link;
     private LocalDate releaseDate;
     @Id

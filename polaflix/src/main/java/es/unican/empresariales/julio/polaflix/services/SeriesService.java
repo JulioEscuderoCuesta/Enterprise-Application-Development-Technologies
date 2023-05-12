@@ -5,12 +5,14 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import es.unican.empresariales.julio.polaflix.entities.Chapter;
 import es.unican.empresariales.julio.polaflix.entities.Season;
 import es.unican.empresariales.julio.polaflix.entities.Series;
 import es.unican.empresariales.julio.polaflix.repositories.SeriesRepository;
 
+@Service
 public class SeriesService {
     
     @Autowired

@@ -32,12 +32,13 @@ public class Bill {
     private int whichMonth;
     @JsonView(Views.SeeChargesView.class)
     private int whichYear;
+    @JsonView(Views.SeeChargesView.class)
     private BillStatus status;
     @ManyToOne
     @JsonManagedReference
     private User who;
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonManagedReference
     @JsonView(Views.SeeChargesView.class)
     private Set<BillLine> lines;
 

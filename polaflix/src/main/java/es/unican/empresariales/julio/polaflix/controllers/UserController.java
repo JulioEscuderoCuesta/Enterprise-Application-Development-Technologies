@@ -1,8 +1,9 @@
 package es.unican.empresariales.julio.polaflix.controllers;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.swing.text.View;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -22,13 +22,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import es.unican.empresariales.julio.polaflix.Views;
 import es.unican.empresariales.julio.polaflix.entities.Bill;
 import es.unican.empresariales.julio.polaflix.entities.Chapter;
-import es.unican.empresariales.julio.polaflix.entities.Season;
-import es.unican.empresariales.julio.polaflix.entities.Series;
 import es.unican.empresariales.julio.polaflix.entities.User;
-import es.unican.empresariales.julio.polaflix.repositories.BillRepository;
-import es.unican.empresariales.julio.polaflix.repositories.UserRepository;
-import es.unican.empresariales.julio.polaflix.services.BillService;
-import es.unican.empresariales.julio.polaflix.services.SeriesService;
 import es.unican.empresariales.julio.polaflix.services.UserService;
 
 @RestController
@@ -37,10 +31,7 @@ public class UserController {
 
     @Autowired
     private UserService us;
-    @Autowired
-    private BillService bs;
-    @Autowired
-    private SeriesService ss;
+    
 
     @GetMapping("/{userId}")
     @JsonView(Views.UserView.class)
@@ -57,7 +48,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @JsonView(Views.NewUser.class) User newUser) {
+    public ResponseEntity<User> createUser(@RequestBody User newUser) {
         Optional<User> user = us.createNewUser(newUser);
         ResponseEntity<User> result;
         if (user.isPresent()) {
@@ -98,8 +89,22 @@ public class UserController {
     @GetMapping("/{userId}/bills")
     @JsonView(Views.SeeChargesView.class)
     public ResponseEntity<Set<Bill>> getBillsByUserId(@PathVariable Long userId) {
-        Optional<Set<Bill>> list = bs.findByUserId(userId);
+        Optional<Set<Bill>> list = us.findBillsByUserId(userId);
         ResponseEntity<Set<Bill>> result;
+        if(list.isPresent()) {
+            result = ResponseEntity.ok(list.get());
+        }
+        else {
+            result = ResponseEntity.notFound().build();
+        }
+        return result;
+    }
+
+    @GetMapping("/{userId}/bills/{billId}")
+    @JsonView(Views.SeeChargesView.class)
+    public ResponseEntity<Bill> getBillsByUserId(@PathVariable Long userId, @PathVariable Long billId) {
+        Optional<Bill> list = us.findBillByUserId(userId, billId);
+        ResponseEntity<Bill> result;
         if(list.isPresent()) {
             result = ResponseEntity.ok(list.get());
         }

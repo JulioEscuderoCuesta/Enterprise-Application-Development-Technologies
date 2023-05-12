@@ -3,8 +3,11 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
+import es.unican.empresariales.julio.polaflix.Views;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,13 +21,18 @@ public class BillLine {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id; 
     
+    @JsonView(Views.SeeChargesView.class)
     private LocalDate visualizationDate;
+    @JsonView(Views.SeeChargesView.class)
     private int chapterNumber;
+    @JsonView(Views.SeeChargesView.class)
     private int seasonNumber;
+    @JsonView(Views.SeeChargesView.class)
     private String seriesName;
+    @JsonView(Views.SeeChargesView.class)
     private double charge;
     @ManyToOne
-    @JsonManagedReference
+    @JsonBackReference
     private Bill bill;
 
     private BillLine() {
@@ -85,13 +93,16 @@ public class BillLine {
         if(o == null || getClass() != o.getClass()) return false;
         BillLine that = (BillLine) o;
         return Objects.equals(this.visualizationDate, that.visualizationDate)
+            && Objects.equals(this.chapterNumber, that.chapterNumber)
+            && Objects.equals(this.seriesName, that.seriesName)
+            && Objects.equals(this.seasonNumber, that.seasonNumber)
             && Objects.equals(this.charge, that.charge)
             && Objects.equals(this.bill, that.bill);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(visualizationDate, charge, bill);
+        return Objects.hash(visualizationDate, chapterNumber, seriesName, seasonNumber, charge, bill);
     }
 
 }
