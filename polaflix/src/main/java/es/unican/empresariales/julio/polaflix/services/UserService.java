@@ -103,12 +103,12 @@ public class UserService {
      }
 
      @Transactional
-    public Optional<Set<Bill>> findBillsByUserId(Long userId) {
+    public Set<Bill> findBillsByUserId(Long userId) {
           Optional<User> optionalUser = ur.findById(userId);
           if(optionalUser.isPresent()) {
-               Optional<Set<Bill>> optionalBill = ur.findBillsByUserId(optionalUser.get());
-               if(optionalBill.isPresent()) 
-                    return optionalBill;
+               Set<Bill> bills = ur.findBillsByUserId(optionalUser.get());
+               if(!bills.isEmpty()) 
+                    return bills;
           }
           return null;
     }
@@ -125,7 +125,7 @@ public class UserService {
           return null;
     }
 
-     public Optional<List<Series>> getPendingSeriesByUserId(Long userId) {
+     public List<Series> getPendingSeriesByUserId(Long userId) {
           return ur.findPendingSeriesByUserId(userId);
      }
     

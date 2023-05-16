@@ -31,12 +31,10 @@ public class SeriesController {
     public ResponseEntity<List<Series>> getSeries() {
         Optional<List<Series>> optionalSeries = ss.findAllSeries();
         ResponseEntity<List<Series>> result;
-        if(optionalSeries.isPresent()) {
+        if(optionalSeries.isPresent()) 
             result = ResponseEntity.ok(optionalSeries.get());
-        }
-        else {
+        else 
             result = ResponseEntity.notFound().build();
-        }
         return result;
     }
 
@@ -45,41 +43,34 @@ public class SeriesController {
     public ResponseEntity<Series> getSeries(@PathVariable Long seriesId) {
         Optional<Series> series = ss.findSeries(seriesId);
         ResponseEntity<Series> result;
-
-        if (series.isPresent()) {
+        if (series.isPresent()) 
             result = ResponseEntity.ok(series.get());
-        }
-        else {
+        else 
             result = ResponseEntity.notFound().build();
-        }
         return result;
     }
 
     @GetMapping("/{seriesId}/seasons")
     @JsonView(Views.SelectSeriesToWatch.class)
     public ResponseEntity<List<Season>> getSeasons(@PathVariable Long seriesId) {
-        Optional<List<Season>> optionalSeasons = ss.findAllSeasonsBySeriesId(seriesId);
+        List<Season> seasons = ss.findAllSeasonsBySeriesId(seriesId);
         ResponseEntity<List<Season>> result;
-        if(optionalSeasons.isPresent()) {
-            result = ResponseEntity.ok(optionalSeasons.get());
-        }
-        else {
+        if(!seasons.isEmpty()) 
+            result = ResponseEntity.ok(seasons);
+        else 
             result = ResponseEntity.notFound().build();
-        }
         return result;
     }
 
     @GetMapping("/{seriesId}/seasons/{seasonNumber}/chapters")
     @JsonView(Views.SelectSeriesToWatch.class)
     public ResponseEntity<List<Chapter>> getSeasons(@PathVariable String seasonNumber, @PathVariable Long seriesId) {
-        Optional<List<Chapter>> optionalChapters = ss.findAllChapterBySeasonNumberAndBySeriesId(seasonNumber, seriesId);
+        List<Chapter> chapters = ss.findAllChapterBySeasonNumberAndBySeriesId(seasonNumber, seriesId);
         ResponseEntity<List<Chapter>> result;
-        if(optionalChapters.isPresent()) {
-            result = ResponseEntity.ok(optionalChapters.get());
-        }
-        else {
+        if(!chapters.isEmpty()) 
+            result = ResponseEntity.ok(chapters);
+        else 
             result = ResponseEntity.notFound().build();
-        }
         return result;
     }
     

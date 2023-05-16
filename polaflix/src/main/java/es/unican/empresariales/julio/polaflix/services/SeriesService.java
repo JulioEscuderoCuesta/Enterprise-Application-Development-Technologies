@@ -26,12 +26,12 @@ public class SeriesService {
         return sr.findById(seriesId);
     }
 
-    public Optional<List<Season>> findAllSeasonsBySeriesId(Long seriesId) {
+    public List<Season> findAllSeasonsBySeriesId(Long seriesId) {
         return sr.findAllSeasons(seriesId);
 
     }
 
-    public Optional<List<Chapter>> findAllChapterBySeasonNumberAndBySeriesId(String seasonNumber, Long seriesId) {
+    public List<Chapter> findAllChapterBySeasonNumberAndBySeriesId(String seasonNumber, Long seriesId) {
         return sr.findChapters(seasonNumber, seriesId);
     }
 }

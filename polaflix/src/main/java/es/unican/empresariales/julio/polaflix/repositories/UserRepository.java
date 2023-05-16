@@ -14,18 +14,15 @@ import es.unican.empresariales.julio.polaflix.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT b.who FROM Bill b WHERE b.id = ?1")
-    public User findByBillId(Long billId);
-
     @Query("SELECT b FROM Bill b WHERE b.who = ?1")
-    public Optional<Set<Bill>> findBillsByUserId(User user);
+    public Set<Bill> findBillsByUserId(User user);
 
     @Query("SELECT b FROM Bill b WHERE b.who = ?1 AND b.id = ?2")
     public Optional<Bill> findBillByUserId(User user, Long billId);
 
     //@Query("SELECT s FROM Series s, Users u WHERE u.id = :userId AND s MEMBER OF u.pendingSeries")
     @Query("SELECT b FROM Bill b WHERE b.who = ?1 AND b.id = ?2")
-    public Optional<List<Series>> findPendingSeriesByUserId(Long userId);
+    public List<Series> findPendingSeriesByUserId(Long userId);
 
 
 }

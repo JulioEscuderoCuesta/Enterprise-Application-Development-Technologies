@@ -85,10 +85,10 @@ public class UserController {
     @GetMapping("/{userId}/bills")
     @JsonView(Views.SeeChargesView.class)
     public ResponseEntity<Set<Bill>> getBillsByUserId(@PathVariable Long userId) {
-        Optional<Set<Bill>> list = us.findBillsByUserId(userId);
+        Set<Bill> bills = us.findBillsByUserId(userId);
         ResponseEntity<Set<Bill>> result;
-        if(list.isPresent()) 
-            result = ResponseEntity.ok(list.get());
+        if(!bills.isEmpty()) 
+            result = ResponseEntity.ok(bills);
         else 
             result = ResponseEntity.notFound().build();
         return result;
@@ -108,10 +108,10 @@ public class UserController {
 
     @GetMapping("/{userId}/pendingSeries")
     public ResponseEntity<List<Series>> getPendingSeries(@PathVariable Long userId) {
-        Optional<List<Series>> optionalPendingSeries = us.getPendingSeriesByUserId(userId);
+        List<Series> pendingSeries = us.getPendingSeriesByUserId(userId);
         ResponseEntity<List<Series>> result;
-        if(optionalPendingSeries.isPresent()) 
-            result = ResponseEntity.ok(optionalPendingSeries.get());
+        if(!pendingSeries.isEmpty()) 
+            result = ResponseEntity.ok(pendingSeries);
         else
             result = ResponseEntity.notFound().build();
         return result;
