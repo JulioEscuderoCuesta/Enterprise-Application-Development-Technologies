@@ -8,6 +8,7 @@ import javax.swing.text.View;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,10 +27,10 @@ import es.unican.empresariales.julio.polaflix.entities.Chapter;
 import es.unican.empresariales.julio.polaflix.entities.Series;
 import es.unican.empresariales.julio.polaflix.entities.User;
 import es.unican.empresariales.julio.polaflix.services.UserService;
-import io.micrometer.core.ipc.http.HttpSender.Response;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     @Autowired
