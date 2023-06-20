@@ -44,17 +44,14 @@ Estos seis elementos del modelo de dominio se clasificarían como Entities, ya q
 Por otro lado, todos estos seis elementos son susceptibles de cambios en sus propiedades que deben ser anotados y gestionados a lo largo de su ciclo de vida. Una serie puede obtener nuevas temporadas y capítulos o nuevos actores, una factura se va modificando su estado y el número de cargos, un usuario va obteniendo nuevas facturas, modificando sus listas de series…
 
 - Value Objects: BillLine
+
 BillLine es un Value Object, ya que solo contiene una serie de datos referentes a la propia Bill. Estos datos no necesitan ser identificados y podrían estar duplicados en el sistema, es decir, se podría tener dos instancias de BillLine con la misma fecha de visualización, cargo, capítulo que se ha visualizado y estar ambas en la misma factura (en el caso en el que un usuario decida ver un mismo capítulo dos veces) y estas dos instancias deberían ser diferentes y estar debidamente separadas.
 
 ### Aggregates y Aggregates Root:
 
-- Aggregates: 
-    - User/Bill/BillLine
-    - Series/Season/Chapter
+- Aggregates: _User_, _Bill_ y _BillLine_. _Series_, _Season_ y _Chapter_
 
-- Aggregates Root:
-    - User 
-    - Series
+- Aggregates Root: _User_ y _Series_
 
 He dividido las clases del dominio en dos aggregates. Por un lado, el usuario con sus facturas y por otro lado la series con sus temporadas y capítulos.
 
