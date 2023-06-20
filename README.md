@@ -36,6 +36,31 @@ Un usuario puede tener 0 o muchas facturas en el sistema. Aunque solo tenga 1 fa
 El usuario tiene 3 tipos de listas con series. Una lista de series pendientes, otra de empezadas y otra de finalizadas. Esto se modela con relaciones a diferencia de el estado de la factura, ya que la factura pertenece al usuario pero la serie es independiente del mismo, y si se modelase con un estado, significaría que esa serie tiene ese estado en todo el sistema. El usuario tiene a su vez una serie de capítulos vistos, para tener en cuenta cuando se ha acabado una temporada o una serie y marcarlo como tal.
 Un capítulo puede no haber sido visto por ningún usuario o por varios.
 
+### Entities, Value Objects o Services:
+
+- Entities: Bill, User, Series, Season, Chapter, Categorie
+
+Estos seis elementos del modelo de dominio se clasificarían como Entities, ya que deben ser identificados de manera unívoca y tienen un ciclo de vida que debe ser monitorizado. Si existieran dos instancias del mismo elemento del modelo de dominio con exactamente los mismas propiedades o atributos (a excepción del identificador), estos dos objetos deberían ser exactamente los mismos. No puede existir en el sistema, por ejemplo, dos objetos Bill con los mismos valores en todas sus propiedades y que sean objetos distintos. 
+Por otro lado, todos estos seis elementos son susceptibles de cambios en sus propiedades que deben ser anotados y gestionados a lo largo de su ciclo de vida. Una serie puede obtener nuevas temporadas y capítulos o nuevos actores, una factura se va modificando su estado y el número de cargos, un usuario va obteniendo nuevas facturas, modificando sus listas de series…
+
+- Value Objects: BillLine
+BillLine es un Value Object, ya que solo contiene una serie de datos referentes a la propia Bill. Estos datos no necesitan ser identificados y podrían estar duplicados en el sistema, es decir, se podría tener dos instancias de BillLine con la misma fecha de visualización, cargo, capítulo que se ha visualizado y estar ambas en la misma factura (en el caso en el que un usuario decida ver un mismo capítulo dos veces) y estas dos instancias deberían ser diferentes y estar debidamente separadas.
+
+### Aggregates y Aggregates Root:
+
+- Aggregates: 
+    - User/Bill/BillLine
+    - Series/Season/Chapter
+
+- Aggregates Root:
+    - User 
+    - Series
+
+He dividido las clases del dominio en dos aggregates. Por un lado, el usuario con sus facturas y por otro lado la series con sus temporadas y capítulos.
+
+Sobre el primer Aggregate, User, Bill y BillLine tienen un ciclo de vida común, queriendo esto decir que, si elimino un usuario del sistema, deberían eliminarse sus facturas y las líneas que componen sus facturas. Además, User es el Aggregate Root, ya que es el encargado de gestionar los invariantes (si se quiere verificar algo relacionado con una factura, habría que acceder a ella a través del usuario). Por otro lado, no tendría sentido crear una factura sin tener previamente un usuario al que asociar dicha factura.
+
+En cuanto al segundo Aggregate, también tienen todas estas clases un ciclo de vida común. Si una serie se eliminase del sistema, deberían entonces eliminarse sus temporadas y los capítulos de estas temporadas. El Aggregate Root es Serie ya que, para acceder a las temporadas o capítulos de una serie, se debería comenzar accediendo a la propia serie. De nuevo, no tiene sentido crear una temporada o un capítulo sin haber creado previamente una serie que contenga esa nueva temporada o capítulo.
 
 ## Explicación del código
 
