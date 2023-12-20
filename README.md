@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Práctica Desarrollo Empresas
 
 ## Explicación del Modelo de Dominio
