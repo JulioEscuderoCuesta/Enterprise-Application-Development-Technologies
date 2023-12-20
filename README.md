@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Práctica Desarrollo Empresas
 
 ## Explicación del Modelo de Dominio
@@ -183,6 +184,7 @@ En cuanto al segundo Aggregate, también tienen todas estas clases un ciclo de v
     - Anotaciones JPA
 
     Ver explicación de la clase Bill.    
+
 
 
 
