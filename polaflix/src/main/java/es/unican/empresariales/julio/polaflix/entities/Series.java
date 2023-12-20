@@ -22,7 +22,8 @@ public class Series {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @JsonView({Views.SelectSeriesToWatch.class, Views.AddSeriesView.class, Views.UserView.class})
+    private Long seriesId;
 
     @JsonView({Views.SelectSeriesToWatch.class, Views.AddSeriesView.class, Views.UserView.class})
     private String name;

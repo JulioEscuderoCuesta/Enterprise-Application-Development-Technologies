@@ -125,8 +125,14 @@ public class UserService {
           return null;
     }
 
-     public List<Series> getPendingSeriesByUserId(Long userId) {
-          return ur.findPendingSeriesByUserId(userId);
+    @Transactional
+     public List<Series> updatePendingSeries(Long userId, Long seriesId) {
+          Optional<User> optionalUser = ur.findById(userId);
+          Optional<Series> optionalSeries = sr.findById(seriesId);
+          if(optionalSeries.isPresent() && optionalSeries.isPresent()) {
+               optionalUser.get().addSeriesToPendingSeries(optionalSeries.get());
+          }
+          return optionalUser.get().getPendingSeries();
      }
     
 }

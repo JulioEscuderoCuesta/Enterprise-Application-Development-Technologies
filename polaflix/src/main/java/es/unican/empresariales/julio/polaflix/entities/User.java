@@ -3,7 +3,6 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -34,8 +33,8 @@ public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
-    private Long id;
+    @JsonView({Views.UserView.class})
+    private Long userId;
     
     @JsonView({Views.UserView.class})
     private String name;
@@ -222,7 +221,7 @@ public abstract class User {
     * @param series the series to be added to the pending list.
     */
     public void addSeriesToPendingSeries(Series series) {
-        if(!startedSeries.contains(series) && !finishedSeries.contains(series))
+        if(!pendingSeries.contains(series) && !startedSeries.contains(series) && !finishedSeries.contains(series))
             pendingSeries.add(series);
     }
 
@@ -231,7 +230,7 @@ public abstract class User {
     * If the user has already finished the series and starts it again, it will be marked as started.
     * @param series the series to be added to the started list.
     */
-    public void addSeriesToStartedSeries(Series series) {
+    private void addSeriesToStartedSeries(Series series) {
         startedSeries.add(series);
         if(pendingSeries.contains(series))
             pendingSeries.remove(series);
@@ -242,7 +241,7 @@ public abstract class User {
     * Add a series to the finished series list.
     * @param series the series to be added to the finished list.
     */
-    public void addSeriesToFinishedSeries(Series series) {
+    private void addSeriesToFinishedSeries(Series series) {
             startedSeries.remove(series);
             finishedSeries.add(series);
         

@@ -50,6 +50,7 @@ public class UserController {
     }
 
     @PostMapping
+    @JsonView(Views.UserView.class)
     public ResponseEntity<User> createUser(@RequestBody User newUser) {
         Optional<User> user = us.createNewUser(newUser);
         ResponseEntity<User> result;
@@ -61,6 +62,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
+    @JsonView(Views.UserView.class)
     public ResponseEntity<User> deleteUser(@PathVariable Long userId) {
         Optional<User> optionalUser = us.deleteUser(userId);
         ResponseEntity<User> result;
@@ -72,7 +74,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUser(@RequestParam Long userId, @RequestBody User userDetail) {
+    @JsonView(Views.UserView.class)
+    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User userDetail) {
         Optional<User> user = us.updateUser(userId, userDetail);
         ResponseEntity<User> result;
         if(user.isPresent()) 
@@ -107,25 +110,17 @@ public class UserController {
         return result;
     }
 
-    @GetMapping("/{userId}/pendingSeries")
-    public ResponseEntity<List<Series>> getPendingSeries(@PathVariable Long userId) {
-        List<Series> pendingSeries = us.getPendingSeriesByUserId(userId);
+    @PutMapping("/{userId}/pendingSeries/{seriesId}")
+    @JsonView(Views.UserView.class)
+    public ResponseEntity<List<Series>> updatePendingSeries(@PathVariable Long userId, @PathVariable Long seriesId) {
+        List<Series> pendingSeries = us.updatePendingSeries(userId, seriesId);
         ResponseEntity<List<Series>> result;
         if(!pendingSeries.isEmpty()) 
             result = ResponseEntity.ok(pendingSeries);
         else
             result = ResponseEntity.notFound().build();
-        return result;
-        
+        return result; 
     }
-
-    @PutMapping("/{userId}/pendingSeries/{seriesId}")
-    public boolean addSeriesToPendingSeries(@PathVariable Long userId, @PathVariable Long seriesId) {
-        return us.addSeriesToPendingSeries(userId, seriesId);
-        
-        
-    }
-
 
     @PutMapping("/{userId}/chaptersWatched")
     public boolean watchChapter(@RequestParam Long userId, @RequestBody Chapter chapter) {

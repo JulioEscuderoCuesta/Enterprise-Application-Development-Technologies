@@ -2,15 +2,12 @@ package es.unican.empresariales.julio.polaflix.entities;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import es.unican.empresariales.julio.polaflix.Views;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
